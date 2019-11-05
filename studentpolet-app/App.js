@@ -7,6 +7,22 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 
+// Apollo Client imports
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+
+// MobX provider
+import { Provider } from 'mobx-react';
+
+// MobX store
+import RootStore from './stores/RootStore';
+
+// RootStore is a class that constructs the other stores
+const rootStore = new RootStore();
+
+// Initialize ApolloClient with url to the GraphQL interface on the server
+const client = new ApolloClient({ uri: 'http://it2810-38.idi.ntnu.no:3000/graphql' });
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -20,10 +36,22 @@ export default function App(props) {
     );
   } else {
     return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
+      <ApolloProvider client={client}>
+      {/* MobX Provider for all components from App component */}
+      {/* For each component that uses store, the corresponding store injected */}
+        <Provider
+          rootStore={rootStore}
+          filterStore={rootStore.filterStore}
+          sortStore={rootStore.sortStore}
+          searchBarStore={rootStore.searchBarStore}
+          paginationStore={rootStore.paginationStore}
+        >
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        </Provider>
+      </ApolloProvider>
     );
   }
 }
