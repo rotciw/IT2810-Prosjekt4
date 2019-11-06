@@ -6,29 +6,22 @@ import {
   StyleSheet,
   Text,
   View,
+  SafeAreaView,
 } from 'react-native';
 
 import Header from '../components/header/Header'
 import Table from '../components/table/Table'
 
-// Apollo Client imports
-import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
-
-const client = new ApolloClient({ uri: 'http://192.168.0.3:3000/graphql' });
-
 export default function HomeScreen() {
   return (
-    <ApolloProvider client={client}>
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <Header/>
-          <Table/>
-        </ScrollView>
-      </View>
-    </ApolloProvider>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        <Header/>
+        <Table/>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
