@@ -128,9 +128,14 @@ class Table extends Component{
                 {({ loading, error, data, fetchMore }) => {
                     if (loading) {
                         return(
-                        <View style={styles.activity}>
-                            <ActivityIndicator size="large" color="#0000ff"/>
-                        </View>
+                            <FlatList
+                                contentContainerStyle={{ paddingBottom: 35}}
+                                keyExtractor={this.keyExtractor}
+                                data={[]}
+                                renderItem={this.renderItem}
+                                ListHeaderComponent={this.renderHeader}
+                                ListFooterComponent={this.renderFooter}
+                            />
                         )
                     };
                     if (error) return(
