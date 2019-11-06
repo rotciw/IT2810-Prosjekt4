@@ -62,20 +62,40 @@ class Table extends Component{
         />
     )
 
-    handleLoadMore = () => {
+    handleLoadMore = (fetchMore) => {
         this.setState({
-            page: this.state.page + 1
+            page: this.state.page + 1,
         }, () => {
-            if (!this.state.isLoading){
-                console.log("next page");
+        fetchMore({
+            query: this.refreshQuery(
+                this.props.searchBarStore.searchBarValue,
+                this.props.filterStore.packagingFilter,
+                this.props.filterStore.productSelectionFilter,
+                this.props.filterStore.countryFilter,
+                this.props.filterStore.yearMinFilter,
+                this.props.filterStore.yearMaxFilter,
+                this.props.filterStore.priceMinFilter,
+                this.props.filterStore.priceMaxFilter,
+                this.state.page,
+                this.props.sortStore.sortAfter
+            ),
+            updateQuery: (prev, {fetchMoreResult}) => {
+                if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
+                    return prev;
+                }
+                return {
+                    // Concatenate the new feed results after the old ones
+                    productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
+                };
             }
+            })
         });
     };
-    renderRefreshButton = () => {
+    renderRefreshButton = (fetchMore) => {
         return(
             <View style={styles.refreshContainer}>
                 <TouchableOpacity
-                    onPress={this.handleLoadMore}
+                    onPress={() => this.handleLoadMore(fetchMore)}
                     style={styles.refreshButton}
                 >
                     <Icon
@@ -104,8 +124,8 @@ class Table extends Component{
                     this.props.sortStore.sortAfter
                 )
             }>
-                {({ loading, error, data }) => {
-                    if (loading && !data) {
+                {({ loading, error, data, fetchMore }) => {
+                    if (loading) {
                         return(
                         <View style={styles.activity}>
                             <ActivityIndicator size="large" color="#0000ff"/>
@@ -122,7 +142,7 @@ class Table extends Component{
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListFooterComponent={this.renderRefreshButton}
+                            ListFooterComponent={() => this.renderRefreshButton(fetchMore)}
                         />
                     );
                 }}
