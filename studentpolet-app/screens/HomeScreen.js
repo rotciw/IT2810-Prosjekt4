@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 
 import Table from '../components/table/Table'
+import FilterGroup from '../components/filterGroup/FilterGroup'
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
         <Table/>
+        <FilterGroup/>
     </SafeAreaView>
   );
 }
