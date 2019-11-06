@@ -6,6 +6,10 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 
+// Import Header and SearchBar component
+import Header from '../header/Header'
+import SearchBar from '../searchBar/SearchBar'
+
 class Table extends Component{
     constructor(props){
         super(props);
@@ -59,6 +63,23 @@ class Table extends Component{
             bottomDivider
         />
     )
+
+    // Render Header and SearchBar component in the FlatList Header
+    renderHeader = () => {
+        return(
+            <View>
+                <Header/>
+                <SearchBar/>
+            </View>
+        )
+    }
+    renderFooter = () => {
+        return(
+            <View style={styles.activity}>
+                <ActivityIndicator size="large" color="#0000ff"/>
+            </View>
+        )
+    }
 
     handleLoadMore = (fetchMore) => {
         console.log("next page");
@@ -119,10 +140,12 @@ class Table extends Component{
                     );
                     return (
                         <FlatList
+                            contentContainerStyle={{ paddingBottom: 35}}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            //ListFooterComponent={() => this.renderRefreshButton(fetchMore)}
+                            ListHeaderComponent={this.renderHeader}
+                            ListFooterComponent={this.renderFooter}
                             onEndReached={() => this.handleLoadMore(fetchMore)}
                             onEndReachedThreshold={0.1}
                         />
@@ -151,11 +174,8 @@ const styles = StyleSheet.create({
         height: 44,
     },
     activity: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 180,
-        bottom: 0,
+        top: 20,
+        bottom: 50,
         alignItems: 'center',
         justifyContent: 'center'
     },

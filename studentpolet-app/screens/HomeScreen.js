@@ -9,15 +9,11 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import Header from '../components/header/Header'
 import Table from '../components/table/Table'
-import SearchBar from '../components/searchBar/SearchBar'
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-        <Header/>
-        <SearchBar/>
         <Table/>
     </SafeAreaView>
   );
