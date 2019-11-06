@@ -2,11 +2,16 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
+  Image,
+  View,
 } from 'react-native';
 
 export default function Header(props) {
   return (
-    <Text style={styles.headerText}>Studentpolet</Text>
+    <View style={styles.container}>
+      <Image style={{width: 30, height: 30}} source={require('../../assets/images/wine_glass.png')}/>
+      <Text style={styles.headerText}>Studentpolet</Text>
+    </View>
   );
 }
 
@@ -14,8 +19,14 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 25,
     color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    lineHeight: -30,
     textAlign: 'center',
-    marginBottom: 20,
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

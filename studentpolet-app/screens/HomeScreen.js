@@ -11,14 +11,14 @@ import {
 
 import Header from '../components/header/Header'
 import Table from '../components/table/Table'
+import SearchBar from '../components/searchBar/SearchBar'
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
+      <ScrollView>
         <Header/>
+        <SearchBar/>
         <Table/>
       </ScrollView>
     </SafeAreaView>

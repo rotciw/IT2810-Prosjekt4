@@ -10,11 +10,9 @@ class Table extends Component{
     constructor(props){
         super(props);
         this.state = {
-            page: 0,
-            isLoading: false,
+            isLoading: true,
         }
     }
-
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
         yearMin = "", yearMax = "", priceMin = 0, priceMax = 50000,
         skipping = 0, sortAfter = "") {
@@ -56,16 +54,15 @@ class Table extends Component{
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
-            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/250x250-0/" + item.Varenummer + "-1.jpg" } }}
+            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" } }}
             chevron
             bottomDivider
         />
     )
 
     handleLoadMore = (fetchMore) => {
-        this.setState({
-            page: this.state.page + 1,
-        }, () => {
+        console.log("next page");
+        this.props.paginationStore.currentPage += 1;
         fetchMore({
             query: this.refreshQuery(
                 this.props.searchBarStore.searchBarValue,
@@ -76,7 +73,7 @@ class Table extends Component{
                 this.props.filterStore.yearMaxFilter,
                 this.props.filterStore.priceMinFilter,
                 this.props.filterStore.priceMaxFilter,
-                this.state.page,
+                this.props.paginationStore.currentPage,
                 this.props.sortStore.sortAfter
             ),
             updateQuery: (prev, {fetchMoreResult}) => {
@@ -88,9 +85,9 @@ class Table extends Component{
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
                 };
             }
-            })
-        });
+        })
     };
+
     renderRefreshButton = (fetchMore) => {
         return(
             <View style={styles.refreshContainer}>
@@ -108,6 +105,7 @@ class Table extends Component{
         )
     }
 
+
     render() {
         return (
             <Query query={
@@ -120,7 +118,7 @@ class Table extends Component{
                     this.props.filterStore.yearMaxFilter,
                     this.props.filterStore.priceMinFilter,
                     this.props.filterStore.priceMaxFilter,
-                    this.props.paginationStore.paginationPage,
+                    this.props.paginationStore.firstPage,
                     this.props.sortStore.sortAfter
                 )
             }>
@@ -172,7 +170,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 0,
+        top: 180,
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center'
