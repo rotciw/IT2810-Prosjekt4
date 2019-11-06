@@ -16,11 +16,9 @@ import SearchBar from '../components/searchBar/SearchBar'
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
         <Header/>
         <SearchBar/>
         <Table/>
-      </ScrollView>
     </SafeAreaView>
   );
 }

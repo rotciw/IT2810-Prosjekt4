@@ -88,24 +88,6 @@ class Table extends Component{
         })
     };
 
-    renderRefreshButton = (fetchMore) => {
-        return(
-            <View style={styles.refreshContainer}>
-                <TouchableOpacity
-                    onPress={() => this.handleLoadMore(fetchMore)}
-                    style={styles.refreshButton}
-                >
-                    <Icon
-                        name='refresh'
-                        color='#fff'
-                        size={30}
-                    />
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
-
     render() {
         return (
             <Query query={
@@ -140,7 +122,9 @@ class Table extends Component{
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListFooterComponent={() => this.renderRefreshButton(fetchMore)}
+                            //ListFooterComponent={() => this.renderRefreshButton(fetchMore)}
+                            onEndReached={() => this.handleLoadMore(fetchMore)}
+                            onEndReachedThreshold={0.1}
                         />
                     );
                 }}
