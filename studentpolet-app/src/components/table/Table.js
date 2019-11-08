@@ -111,6 +111,8 @@ class Table extends Component{
         })
     };
 
+
+
     render() {
         return (
             <Query query={
@@ -163,5 +165,7 @@ class Table extends Component{
     }
 
 }
+
+
 
 export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore')(observer(Table));
