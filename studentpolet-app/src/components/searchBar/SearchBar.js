@@ -31,6 +31,7 @@ class SearchBar extends Component {
                 onChangeText={text => this.handleSubmit(text)}
                 value={this.state.searchBarValue}
                 placeholder="Navn, type, land.."
+                placeholderTextColor={'white'}
             />
         </View>
     );

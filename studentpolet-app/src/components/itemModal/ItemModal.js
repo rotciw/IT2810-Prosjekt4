@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 function ItemModal(props) {
     return (
         <Modal
-            animationType="fade"
+            animationType="slide"
             transparent={false}
             visible={props.modalStore.modalVisible}
         >

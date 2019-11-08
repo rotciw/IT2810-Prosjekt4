@@ -76,14 +76,14 @@ class Table extends Component {
     )
 
     // Render Header and SearchBar component in the FlatList Header
-    renderHeader = () => {
-        return (
-            <View>
-                <Header />
-                <SearchBar />
-            </View>
-        )
-    }
+    // renderHeader = () => {
+    //     return (
+    //         // <View>
+    //         //     <Header />
+    //         //     <SearchBar />
+    //         // </View>
+    //     )
+    // }
     renderFooter = () => {
         return (
             <View style={styles.activity}>
@@ -145,7 +145,7 @@ class Table extends Component {
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
-                                ListHeaderComponent={this.renderHeader}
+                                // ListHeaderComponent={this.renderHeader}
                                 ListFooterComponent={this.renderFooter}
                             />
                         )
@@ -162,7 +162,7 @@ class Table extends Component {
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListHeaderComponent={this.renderHeader}
+                            // ListHeaderComponent={this.renderHeader}
                             ListFooterComponent={this.renderFooter}
                             onEndReached={() => this.handleLoadMore(fetchMore)}
                             onEndReachedThreshold={0.1}
@@ -190,10 +190,4 @@ class Table extends Component {
 
 }
 
-<<<<<<< HEAD
 export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore', 'modalStore')(observer(Table));
-=======
-
-
-export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore')(observer(Table));
->>>>>>> 0035db36b1d2da5e75e0f99b33c58b502664dd56
