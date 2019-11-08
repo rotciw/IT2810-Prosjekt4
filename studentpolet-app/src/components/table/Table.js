@@ -119,6 +119,8 @@ class Table extends Component {
         })
     };
 
+
+
     render() {
         return (
             <Query query={
@@ -188,4 +190,10 @@ class Table extends Component {
 
 }
 
+<<<<<<< HEAD
 export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore', 'modalStore')(observer(Table));
+=======
+
+
+export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore')(observer(Table));
+>>>>>>> 0035db36b1d2da5e75e0f99b33c58b502664dd56
