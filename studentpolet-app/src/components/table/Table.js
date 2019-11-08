@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
+import { styles } from '../../styles/table';
 
 // Import Header and SearchBar component
 import Header from '../header/Header'
@@ -58,7 +59,8 @@ class Table extends Component{
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
-            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" } }}
+            leftAvatar={{  height:64, width:32,resizeMode: 'contain', source: { uri: "https://bilder.vinmonopolet.no/cache/200x200-0/" + item.Varenummer + "-1.jpg" }}}
+            subtitle={"Alkohol Pr. Krone: " + item.AlkoholPrKrone}
             chevron
             bottomDivider
         />
@@ -161,37 +163,5 @@ class Table extends Component{
     }
 
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingBottom: 22
-    },
-    refreshContainer: {
-        flex: 1,
-        padding: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    item: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-    },
-    activity: {
-        top: 20,
-        bottom: 50,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    refreshButton: {
-        height: 50,
-        width: 50,
-        borderRadius: 100,
-        backgroundColor: '#2f95dc',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
 
 export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore')(observer(Table));
