@@ -33,17 +33,10 @@ function ItemModal(props) {
                     </View>
                     <View style={styles.divider}>
                         <Text>
-<<<<<<< HEAD
                             Volum:<Text style={{ fontWeight: "bold" }}> {props.itemVolume}l</Text>
                         </Text>
                         <Text>
                             Alkoholprosent:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPercentage}%</Text>
-=======
-                            Volum:<Text style={{ fontWeight: "bold" }}> {props.itemVolume}</Text>
-                        </Text>
-                        <Text>
-                            Alkoholprosent:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPercentage}</Text>
->>>>>>> 9fdd70c9cf80f6bb5dbb8503fb0bf7443cdf2ede
                         </Text>
                         <Text>
                             Årgang:<Text style={{ fontWeight: "bold" }}> {props.itemYear}</Text>
@@ -52,11 +45,7 @@ function ItemModal(props) {
                     </View>
                     <View style={styles.divider}>
                         <Text>
-<<<<<<< HEAD
                             Literpris:<Text style={{ fontWeight: "bold" }}> {props.itemLitrePrice} kr</Text>
-=======
-                            Literpris:<Text style={{ fontWeight: "bold" }}> {props.itemLitrePrice}</Text>
->>>>>>> 9fdd70c9cf80f6bb5dbb8503fb0bf7443cdf2ede
                         </Text>
                         <Text>
                             Emballasjetype:<Text style={{ fontWeight: "bold" }}> {props.itemPackaging}</Text>
