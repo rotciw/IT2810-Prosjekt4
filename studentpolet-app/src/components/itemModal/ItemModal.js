@@ -10,6 +10,7 @@ function ItemModal(props) {
             animationType="slide"
             transparent={false}
             visible={props.modalStore.modalVisible}
+            onRequestClose={()=>props.modalStore.setModalInvisible()}
         >
             <SafeAreaView style={styles.container}>
                 <View>
