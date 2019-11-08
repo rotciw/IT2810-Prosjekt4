@@ -24,12 +24,17 @@ class FilterGroup extends Component {
             distinctCountries: filterData.distinctCountries,
             distinctPackaging: filterData.distinctPackaging,
             distinctProductSelection: filterData.distinctProductSelection,
+            selectedCountryFilterId: "",
+            selectedPackagingFilterId: "",
+            selectedProductSelectionFilterId: "",
             selectedCountryFilter: "",
             selectedPackagingFilter: "",
             selectedProductSelectionFilter: "",
-            yearMinFilter: 1930,
-            yearMaxFilter: 2019,
-            priceMinFilter: 1,
+            yearMinFilterInt: 1930,
+            yearMaxFilterInt: 2019,
+            yearMinFilterString: "",
+            yearMaxFilterString: "",
+            priceMinFilter: 0,
             priceMaxFilter: 10000,
             modalVisible: false,
         };
@@ -38,14 +43,11 @@ class FilterGroup extends Component {
 
     selectButton(filterGroup, name, i) {
         if (filterGroup === 0) {
-            this.setState({ selectedCountryFilter: i });
-            this.props.filterStore.addCountryFilter(name);
+            this.setState({ selectedCountryFilterId: i, selectedCountryFilter: name });
         } else if (filterGroup === 1) {
-            this.setState({ selectedPackagingFilter: i });
-            this.props.filterStore.addPackagingFilter(name);
+            this.setState({ selectedPackagingFilterId: i, selectedPackagingFilter: name });
         } else if (filterGroup === 2) {
-            this.setState({ selectedProductSelectionFilter: i });
-            this.props.filterStore.addProductSelectionFilter(name);
+            this.setState({ selectedProductSelectionFilterId: i, selectedProductSelectionFilter: name });
         }
         // Reset Pagination when selecting a filter
         this.props.paginationStore.reset();
@@ -70,39 +72,24 @@ class FilterGroup extends Component {
 
     handleYearSliderUpdate = values => {
         this.setState({
-            yearMinFilter: parseInt(values[0].toFixed(0)),
-            yearMaxFilter: parseInt(values[1].toFixed(0)),
+            yearMinFilterInt: values[0],
+            yearMaxFilterInt: values[1],
+            yearMinFilterString: values[0].toFixed(0),
+            yearMaxFilterString: values[1].toFixed(0),
         });
     }
-
-    handleYearSliderSubmit = values => {
-        this.props.filterStore.addYearMinFilter(parseInt(values[0].toFixed(0)));
-        this.props.filterStore.addYearMaxFilter(parseInt(values[1].toFixed(0)));
-
-        // Reset Pagination when selecting years
-        this.props.paginationStore.reset();
-    }
-
     handlePriceSliderUpdate = values => {
         this.setState({
-            priceMinFilter: parseInt(values[0].toFixed(0)),
-            priceMaxFilter: parseInt(values[1].toFixed(0)),
+            priceMinFilter: values[0].toFixed(0),
+            priceMaxFilter: values[1].toFixed(0),
         });
-    }
-
-    handlePriceSliderSubmit = values => {
-        this.props.filterStore.addPriceMinFilter(parseInt(values[0].toFixed(0)));
-        this.props.filterStore.addPriceMaxFilter(parseInt(values[1].toFixed(0)));
-
-        // Reset Pagination when selecting years
-        this.props.paginationStore.reset();
     }
 
     resetFilters = () => {
         this.setState({
-            selectedCountryFilter: "",
-            selectedPackagingFilter: "",
-            selectedProductSelectionFilter: "",
+            selectedCountryFilterId: "",
+            selectedPackagingFilterId: "",
+            selectedProductSelectionFilterId: "",
         });
         // Reset filters
         this.props.filterStore.addCountryFilter("");
@@ -118,6 +105,18 @@ class FilterGroup extends Component {
     }
 
     setModalVisible(visible) {
+        if (!visible) {
+            this.props.filterStore.addYearMinFilter(this.state.yearMinFilterString);
+            this.props.filterStore.addYearMaxFilter(this.state.yearMaxFilterString);
+            this.props.filterStore.addPriceMinFilter(this.state.priceMinFilter);
+            this.props.filterStore.addPriceMaxFilter(parseInt(this.state.priceMaxFilter));
+            this.props.filterStore.addCountryFilter(this.state.selectedCountryFilter);
+            this.props.filterStore.addPackagingFilter(this.state.selectedPackagingFilter);
+            this.props.filterStore.addProductSelectionFilter(this.state.selectedProductSelectionFilter);
+
+            // Reset Pagination when selecting filters
+            this.props.paginationStore.reset();
+        }
         this.setState({modalVisible: visible});
     }
 
@@ -137,7 +136,7 @@ class FilterGroup extends Component {
                                 left={props => <List.Icon {...props} icon="crosshairs-gps" />}
                                 >
                                 <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilter)}
+                                    {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilterId)}
                                 </View>
                                 </List.Accordion>
 
@@ -146,12 +145,11 @@ class FilterGroup extends Component {
                                 left={props => <List.Icon {...props} icon="calendar-range" />}
                                 >
                                 <View style={styles.sliderContainer}>
-                                    <Text>{this.state.yearMinFilter} - {this.state.yearMaxFilter}</Text>
+                                    <Text>{this.state.yearMinFilterInt} - {this.state.yearMaxFilterInt}</Text>
                                     <MultiSlider
-                                        values={[this.state.yearMinFilter, this.state.yearMaxFilter]}
+                                        values={[this.state.yearMinFilterInt, this.state.yearMaxFilterInt]}
                                         sliderLength={Dimensions.get('window').width/1.5}
                                         onValuesChange={this.handleYearSliderUpdate}
-                                        onValuesChangeFinish={this.handleYearSliderSubmit}
                                         min={1930}
                                         max={2019}
                                     />
@@ -165,11 +163,10 @@ class FilterGroup extends Component {
                                 <View style={styles.sliderContainer}>
                                     <Text>{this.state.priceMinFilter} - {this.state.priceMaxFilter}</Text>
                                     <MultiSlider
-                                        values={[this.state.priceMinFilter, this.state.priceMaxFilter]}
+                                        values={[parseInt(this.state.priceMinFilter), parseInt(this.state.priceMaxFilter)]}
                                         sliderLength={Dimensions.get('window').width/1.5}
                                         onValuesChange={this.handlePriceSliderUpdate}
-                                        onValuesChangeFinish={this.handlePriceSliderSubmit}
-                                        min={1}
+                                        min={0}
                                         max={10000}
                                     />
                                 </View>
@@ -180,7 +177,7 @@ class FilterGroup extends Component {
                                 left={props => <List.Icon {...props} icon="package" />}
                                 >
                                 <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilter)}
+                                    {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilterId)}
                                 </View>
                                 </List.Accordion>
 
@@ -189,7 +186,7 @@ class FilterGroup extends Component {
                                 left={props => <List.Icon {...props} icon="bottle-wine" />}
                                 >
                                 <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilter)}
+                                    {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilterId)}
                                 </View>
                                 </List.Accordion>
                             </List.Section>
