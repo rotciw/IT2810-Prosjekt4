@@ -1,15 +1,13 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import FavoriteTable from '../components/favoriteTable/FavoriteTable'
+
 
 export default function FavoriteScreen() {
   return (
     <ScrollView style={styles.container}>
-      {/**
-       * Go ahead and delete ExpoFavoriteView and replace it with your content;
-       * we just wanted to provide you with some helpful links.
-       */}
-      <ExpoLinksView />
+      <FavoriteTable />
     </ScrollView>
   );
 }

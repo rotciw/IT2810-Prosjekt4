@@ -19,27 +19,34 @@ class FavoriteTable extends Component{
         }
     }
 
-    storeData = async () => {
+    keyExtractor = (item, index) => index.toString()
+
+    storeData = async (favorite) => {
       try {
-        await AsyncStorage.setItem('Favorites', 'Test');
+        let value = await AsyncStorage.getItem('Favorites') || [];
+        value.push(favorite)
+        await AsyncStorage.removeItem('Favorites');
+        await AsyncStorage.clear();
+        //console.log(value);
+        await AsyncStorage.setItem('Favorites', JSON.stringify(value));
+        console.log('Done with adding');
       } catch (error) {
         // Error saving data
+        console.log("error");
+        
       }
-      console.log('Done!')
     };
       
     getMyValue = async () => {
       try {
-        const value = await AsyncStorage.getItem('Favorites')
-        this.setState({key:value})
+        const value = await AsyncStorage.getItem('Favorites');
+        this.setState({key:JSON.parse(value)});
       } catch(e) {
         // read error
       }
-      console.log('Done.')
     }
       
     
-    /*
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
@@ -48,25 +55,19 @@ class FavoriteTable extends Component{
             bottomDivider
         />
     )
-    */
+
     render() {
-      this.storeData();
+      this.storeData({"Varenummer":"6851201","Varenavn":"God Jul fra Piemonte Barbera 2016","Volum":"0.75","Pris":79,"Literpris":"105.33","Varetype":"Rødvin","Produktutvalg":"Bestillingsutvalget","Smak":"Middels fyldig. rund. med fint bærpreg og kompleks og lang ettersmak.","Land":"Italia","Argang":"2016","Alkohol":14,"AlkoholPrKrone":1.329,"Emballasjetype":"Glass","Vareurl":"http://www.vinmonopolet.no/vareutvalg/varedetaljer/sku-6850201","__typename":"product"});
       this.getMyValue();
         return(
-          <View>
-            {console.log(this.state.key)}
-            <Text>{this.state.key}</Text>
-          </View>
-          
-          /*
             <FlatList
                 contentContainerStyle={{ paddingBottom: 35}}
                 keyExtractor={this.keyExtractor}
-                data={data.productQuery}
+                data={this.state.key}
                 renderItem={this.renderItem}
                 onEndReachedThreshold={0.1}
+                
             />
-            */
         )
     }
 }
