@@ -6,7 +6,7 @@ class FilterStore {
     yearMinFilter = "";
     yearMaxFilter = "";
     priceMinFilter = 1;
-    priceMaxFilter = 50000;
+    priceMaxFilter = 24;
 
     // Actions
     addCountryFilter(value) {

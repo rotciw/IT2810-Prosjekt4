@@ -18,7 +18,7 @@ class Table extends Component{
         }
     }
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
-        yearMin = "", yearMax = "", priceMin = 0, priceMax = 50000,
+        yearMin = "", yearMax = "", priceMin, priceMax,
         skipping = 0, sortAfter = "") {
 
         // Availbale queries

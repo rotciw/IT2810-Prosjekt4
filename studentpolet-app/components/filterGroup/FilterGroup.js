@@ -29,7 +29,7 @@ class FilterGroup extends Component {
             selectedProductSelectionFilter: "",
             yearMinFilter: 1930,
             yearMaxFilter: 2019,
-            priceMinFilter: 0,
+            priceMinFilter: 1,
             priceMaxFilter: 10000,
             modalVisible: false,
         };
@@ -94,7 +94,7 @@ class FilterGroup extends Component {
         this.props.filterStore.addPriceMinFilter(parseInt(values[0].toFixed(0)));
         this.props.filterStore.addPriceMaxFilter(parseInt(values[1].toFixed(0)));
 
-        // Reset Pagination when selecting prices
+        // Reset Pagination when selecting years
         this.props.paginationStore.reset();
     }
 
@@ -111,7 +111,7 @@ class FilterGroup extends Component {
         this.props.filterStore.addYearMinFilter("");
         this.props.filterStore.addYearMaxFilter("");
         this.props.filterStore.addPriceMinFilter(1);
-        this.props.filterStore.addPriceMaxFilter(50000);
+        this.props.filterStore.addPriceMaxFilter(10000);
 
         // Reset Pagination
         this.props.paginationStore.reset();
@@ -169,7 +169,7 @@ class FilterGroup extends Component {
                                         sliderLength={Dimensions.get('window').width/1.5}
                                         onValuesChange={this.handlePriceSliderUpdate}
                                         onValuesChangeFinish={this.handlePriceSliderSubmit}
-                                        min={0}
+                                        min={1}
                                         max={10000}
                                     />
                                 </View>
