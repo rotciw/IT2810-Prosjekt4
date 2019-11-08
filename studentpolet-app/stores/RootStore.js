@@ -35,15 +35,9 @@ decorate(SearchBarStore, {
 });
 
 decorate(PaginationStore, {
-    paginationPage: observable,
-    prevButtonDisabled: observable,
-    nextButtonDisabled: observable,
-    tableIsEmpty: observable,
-    incrementPage: action,
-    decrementPage: action,
-    firstPage: action,
-    tableEmpty: action,
-    tableNotEmpty: action
+    firstPage: observable,
+    currentPage: observable,
+    reset: action,
 });
 
 class RootStore {

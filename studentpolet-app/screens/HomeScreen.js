@@ -9,18 +9,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import Header from '../components/header/Header'
 import Table from '../components/table/Table'
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <Header/>
         <Table/>
-      </ScrollView>
     </SafeAreaView>
   );
 }

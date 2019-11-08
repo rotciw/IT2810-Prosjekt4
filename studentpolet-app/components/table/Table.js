@@ -6,15 +6,17 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 
+// Import Header and SearchBar component
+import Header from '../header/Header'
+import SearchBar from '../searchBar/SearchBar'
+
 class Table extends Component{
     constructor(props){
         super(props);
         this.state = {
-            page: 0,
-            isLoading: false,
+            isLoading: true,
         }
     }
-
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
         yearMin = "", yearMax = "", priceMin = 0, priceMax = 50000,
         skipping = 0, sortAfter = "") {
@@ -56,16 +58,32 @@ class Table extends Component{
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
-            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/250x250-0/" + item.Varenummer + "-1.jpg" } }}
+            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" } }}
             chevron
             bottomDivider
         />
     )
 
+    // Render Header and SearchBar component in the FlatList Header
+    renderHeader = () => {
+        return(
+            <View>
+                <Header/>
+                <SearchBar/>
+            </View>
+        )
+    }
+    renderFooter = () => {
+        return(
+            <View style={styles.activity}>
+                <ActivityIndicator size="large" color="#0000ff"/>
+            </View>
+        )
+    }
+
     handleLoadMore = (fetchMore) => {
-        this.setState({
-            page: this.state.page + 1,
-        }, () => {
+        console.log("next page");
+        this.props.paginationStore.currentPage += 1;
         fetchMore({
             query: this.refreshQuery(
                 this.props.searchBarStore.searchBarValue,
@@ -76,7 +94,7 @@ class Table extends Component{
                 this.props.filterStore.yearMaxFilter,
                 this.props.filterStore.priceMinFilter,
                 this.props.filterStore.priceMaxFilter,
-                this.state.page,
+                this.props.paginationStore.currentPage,
                 this.props.sortStore.sortAfter
             ),
             updateQuery: (prev, {fetchMoreResult}) => {
@@ -88,25 +106,8 @@ class Table extends Component{
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
                 };
             }
-            })
-        });
+        })
     };
-    renderRefreshButton = (fetchMore) => {
-        return(
-            <View style={styles.refreshContainer}>
-                <TouchableOpacity
-                    onPress={() => this.handleLoadMore(fetchMore)}
-                    style={styles.refreshButton}
-                >
-                    <Icon
-                        name='refresh'
-                        color='#fff'
-                        size={30}
-                    />
-                </TouchableOpacity>
-            </View>
-        )
-    }
 
     render() {
         return (
@@ -120,16 +121,21 @@ class Table extends Component{
                     this.props.filterStore.yearMaxFilter,
                     this.props.filterStore.priceMinFilter,
                     this.props.filterStore.priceMaxFilter,
-                    this.props.paginationStore.paginationPage,
+                    this.props.paginationStore.firstPage,
                     this.props.sortStore.sortAfter
                 )
             }>
                 {({ loading, error, data, fetchMore }) => {
                     if (loading) {
                         return(
-                        <View style={styles.activity}>
-                            <ActivityIndicator size="large" color="#0000ff"/>
-                        </View>
+                            <FlatList
+                                contentContainerStyle={{ paddingBottom: 35}}
+                                keyExtractor={this.keyExtractor}
+                                data={[]}
+                                renderItem={this.renderItem}
+                                ListHeaderComponent={this.renderHeader}
+                                ListFooterComponent={this.renderFooter}
+                            />
                         )
                     };
                     if (error) return(
@@ -139,10 +145,14 @@ class Table extends Component{
                     );
                     return (
                         <FlatList
+                            contentContainerStyle={{ paddingBottom: 35}}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListFooterComponent={() => this.renderRefreshButton(fetchMore)}
+                            ListHeaderComponent={this.renderHeader}
+                            ListFooterComponent={this.renderFooter}
+                            onEndReached={() => this.handleLoadMore(fetchMore)}
+                            onEndReachedThreshold={0.1}
                         />
                     );
                 }}
@@ -169,11 +179,8 @@ const styles = StyleSheet.create({
         height: 44,
     },
     activity: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        top: 20,
+        bottom: 50,
         alignItems: 'center',
         justifyContent: 'center'
     },
