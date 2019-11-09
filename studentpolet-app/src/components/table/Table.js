@@ -6,16 +6,13 @@ import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 import { styles } from '../../styles/table';
 
-// Import Header and SearchBar component
-import Header from '../header/Header';
-import SearchBar from '../searchBar/SearchBar';
 import ItemModal from '../itemModal/ItemModal';
 
 class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
+            isLoading: false,
             item: {}
         }
     }
@@ -84,12 +81,16 @@ class Table extends Component {
     //         // </View>
     //     )
     // }
-    renderFooter = () => {
-        return (
-            <View style={styles.activity}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        )
+    renderFooter = (loading) => {
+        if (this.state.isLoading){
+            return null
+        }else{
+            return (
+                <View style={styles.activity}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            )
+        }
     }
 
     handleLoadMore = (fetchMore) => {
@@ -110,8 +111,10 @@ class Table extends Component {
             ),
             updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
+                    this.setState({isLoading: true})
                     return prev;
                 }
+                this.setState({isLoading: false})
                 return {
                     // Concatenate the new feed results after the old ones
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
@@ -159,13 +162,13 @@ class Table extends Component {
                     return (
                         <View>
                         <FlatList
-                            contentContainerStyle={{ paddingBottom: 35 }}
+                            contentContainerStyle={{ paddingBottom: '40%' }}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
                             // ListHeaderComponent={this.renderHeader}
-                            ListFooterComponent={this.renderFooter}
-                            onEndReached={() => this.handleLoadMore(fetchMore)}
+                            ListFooterComponent={this.renderFooter(loading)}
+                            onEndReached={() => {this.handleLoadMore(fetchMore)}}
                             onEndReachedThreshold={0.1}
                         />
                         <ItemModal
