@@ -93,21 +93,35 @@ class FilterGroup extends Component {
             selectedCountryFilterId: "",
             selectedPackagingFilterId: "",
             selectedProductSelectionFilterId: "",
+            selectedSortingId: 0,
+            selectedCountryFilter: "",
+            selectedPackagingFilter: "",
+            selectedProductSelectionFilter: "",
+            yearMinFilterInt: 1930,
+            yearMaxFilterInt: 2019,
+            yearMinFilterString: "",
+            yearMaxFilterString: "",
+            priceMinFilter: 0,
+            priceMaxFilter: 10000,
+            modalVisible: false,
         });
-        // Reset filters
+        // Reset filterStore
         this.props.filterStore.addCountryFilter("");
         this.props.filterStore.addPackagingFilter("");
         this.props.filterStore.addProductSelectionFilter("");
         this.props.filterStore.addYearMinFilter("");
         this.props.filterStore.addYearMaxFilter("");
-        this.props.filterStore.addPriceMinFilter(1);
+        this.props.filterStore.addPriceMinFilter(0);
         this.props.filterStore.addPriceMaxFilter(10000);
+
+        // Reset sortStore
+        this.props.sortStore.addSortAfter("-AlkoholPrKrone")
 
         // Reset Pagination
         this.props.paginationStore.reset();
     }
 
-    setModalVisible(visible) {
+    setModalVisible = (visible) => {
         if (!visible) {
             this.props.filterStore.addYearMinFilter(this.state.yearMinFilterString);
             this.props.filterStore.addYearMaxFilter(this.state.yearMaxFilterString);
@@ -140,6 +154,7 @@ class FilterGroup extends Component {
                     animationType="slide"
                     transparent={false}
                     visible={this.state.modalVisible}
+                    onRequestClose={() => this.setModalVisible(!this.state.modalVisible)}
                     >
                     <ScrollView style={{marginTop: 22}}>
                         <View>
@@ -213,6 +228,10 @@ class FilterGroup extends Component {
                                     {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilterId)}
                                 </View>
                                 </List.Accordion>
+                                <Button
+                                    title='Nullstill filtrering'
+                                    type='outline'
+                                    onPress={this.resetFilters}/>
                             </List.Section>
                         </View>
                     </ScrollView>
