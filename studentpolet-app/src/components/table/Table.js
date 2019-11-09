@@ -21,7 +21,7 @@ class Table extends Component {
     }
 
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
-        yearMin = "", yearMax = "", priceMin = 0, priceMax = 50000,
+        yearMin = "", yearMax = "", priceMin = 0, priceMax = 10000,
         skipping = 0, sortAfter = "") {
 
         // Availbale queries
@@ -76,14 +76,14 @@ class Table extends Component {
     )
 
     // Render Header and SearchBar component in the FlatList Header
-    renderHeader = () => {
-        return (
-            <View>
-                <Header />
-                <SearchBar />
-            </View>
-        )
-    }
+    // renderHeader = () => {
+    //     return (
+    //         // <View>
+    //         //     <Header />
+    //         //     <SearchBar />
+    //         // </View>
+    //     )
+    // }
     renderFooter = () => {
         return (
             <View style={styles.activity}>
@@ -94,6 +94,7 @@ class Table extends Component {
 
     handleLoadMore = (fetchMore) => {
         this.props.paginationStore.currentPage += 1;
+
         fetchMore({
             query: this.refreshQuery(
                 this.props.searchBarStore.searchBarValue,
@@ -138,14 +139,14 @@ class Table extends Component {
                 )
             }>
                 {({ loading, error, data, fetchMore }) => {
-                    if (loading) {
+                    if (loading && !data) {
                         return (
                             <FlatList
                                 contentContainerStyle={{ paddingBottom: 35 }}
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
-                                ListHeaderComponent={this.renderHeader}
+                                // ListHeaderComponent={this.renderHeader}
                                 ListFooterComponent={this.renderFooter}
                             />
                         )
@@ -162,7 +163,7 @@ class Table extends Component {
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListHeaderComponent={this.renderHeader}
+                            // ListHeaderComponent={this.renderHeader}
                             ListFooterComponent={this.renderFooter}
                             onEndReached={() => this.handleLoadMore(fetchMore)}
                             onEndReachedThreshold={0.1}
@@ -191,4 +192,5 @@ class Table extends Component {
     }
 
 }
+
 export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore', 'modalStore')(observer(Table));

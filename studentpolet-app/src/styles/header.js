@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: Platform.OS === 'ios' ? 24 : StatusBar.currentHeight,
+        marginTop: StatusBar.currentHeight,
         padding: 18,
         justifyContent: 'center',
         alignItems: 'center',

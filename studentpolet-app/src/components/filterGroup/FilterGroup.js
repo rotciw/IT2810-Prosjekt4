@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity,
+    Modal,
+    TouchableHighlight,
+    Dimensions,
+} from 'react-native';
+import { Icon, Button } from 'react-native-elements';
+import { List, Checkbox } from 'react-native-paper';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 let filterData = require("./FilterData");
 
@@ -11,72 +24,72 @@ class FilterGroup extends Component {
             distinctCountries: filterData.distinctCountries,
             distinctPackaging: filterData.distinctPackaging,
             distinctProductSelection: filterData.distinctProductSelection,
+            selectedCountryFilterId: "",
+            selectedPackagingFilterId: "",
+            selectedProductSelectionFilterId: "",
             selectedCountryFilter: "",
             selectedPackagingFilter: "",
             selectedProductSelectionFilter: "",
-            yearMinFilter: 1930,
-            yearMaxFilter: 2019,
+            yearMinFilterInt: 1930,
+            yearMaxFilterInt: 2019,
+            yearMinFilterString: "",
+            yearMaxFilterString: "",
+            priceMinFilter: 0,
+            priceMaxFilter: 10000,
+            modalVisible: false,
         };
         this.selectButton = this.selectButton.bind(this);
     }
 
     selectButton(filterGroup, name, i) {
         if (filterGroup === 0) {
-            this.setState({ selectedCountryFilter: i });
-            this.props.filterStore.addCountryFilter(name);
+            this.setState({ selectedCountryFilterId: i, selectedCountryFilter: name });
         } else if (filterGroup === 1) {
-            this.setState({ selectedPackagingFilter: i });
-            this.props.filterStore.addPackagingFilter(name);
+            this.setState({ selectedPackagingFilterId: i, selectedPackagingFilter: name });
         } else if (filterGroup === 2) {
-            this.setState({ selectedProductSelectionFilter: i });
-            this.props.filterStore.addProductSelectionFilter(name);
+            this.setState({ selectedProductSelectionFilterId: i, selectedProductSelectionFilter: name });
         }
         // Reset Pagination when selecting a filter
-        this.props.paginationStore.firstPage();
+        this.props.paginationStore.reset();
     }
 
     renderFilters(filterGroup, buttonNames, selectedFilter) {
         // Function for displaying a button for each country filter
         const buttons = buttonNames.map((name, i) => {
-            const buttonStyle = i === selectedFilter ? "buttonStyle active" : "buttonStyle";
+            const buttonType = i === selectedFilter ? "solid" : "outline";
             return (
                 <Button
-                    onClick={() => { this.selectButton(filterGroup, name, i); }}
                     key={i}
-                    id={i}
-                    className={buttonStyle}
-                    variant="outline-secondary"
-                >
-                    {name}
-                </Button>
+                    title={name}
+                    type={buttonType}
+                    style={styles.buttonStyle}
+                    onPress={() => { this.selectButton(filterGroup, name, i); }}
+                />
             );
         });
         return buttons;
     };
 
-    handleYearSliderUpdate = (render, handle, value, un, percent) => {
-        this.props.filterStore.addYearMinFilter(parseInt(value[0].toFixed(0)));
-        this.props.filterStore.addYearMaxFilter(parseInt(value[1].toFixed(0)));
+    handleYearSliderUpdate = values => {
         this.setState({
-            yearMinFilter: parseInt(value[0].toFixed(0)),
-            yearMaxFilter: parseInt(value[1].toFixed(0)),
+            yearMinFilterInt: values[0],
+            yearMaxFilterInt: values[1],
+            yearMinFilterString: values[0].toFixed(0),
+            yearMaxFilterString: values[1].toFixed(0),
         });
-        // Reset Pagination when selecting years
-        this.props.paginationStore.firstPage();
     }
-
-    handlePriceSliderUpdate = (render, handle, value, un, percent) => {
-        this.props.filterStore.addPriceMinFilter(parseInt(value[0].toFixed(0)));
-        this.props.filterStore.addPriceMaxFilter(parseInt(value[1].toFixed(0)));
-        // Reset Pagination when selecting prices
-        this.props.paginationStore.firstPage();
+    handlePriceSliderUpdate = values => {
+        this.setState({
+            priceMinFilter: values[0],
+            priceMaxFilter: values[1],
+        });
     }
 
     resetFilters = () => {
         this.setState({
-            selectedCountryFilter: "",
-            selectedPackagingFilter: "",
-            selectedProductSelectionFilter: "",
+            selectedCountryFilterId: "",
+            selectedPackagingFilterId: "",
+            selectedProductSelectionFilterId: "",
         });
         // Reset filters
         this.props.filterStore.addCountryFilter("");
@@ -85,108 +98,182 @@ class FilterGroup extends Component {
         this.props.filterStore.addYearMinFilter("");
         this.props.filterStore.addYearMaxFilter("");
         this.props.filterStore.addPriceMinFilter(1);
-        this.props.filterStore.addPriceMaxFilter(50000);
+        this.props.filterStore.addPriceMaxFilter(10000);
 
         // Reset Pagination
-        this.props.paginationStore.firstPage();
+        this.props.paginationStore.reset();
+    }
+
+    setModalVisible(visible) {
+        if (!visible) {
+            this.props.filterStore.addYearMinFilter(this.state.yearMinFilterString);
+            this.props.filterStore.addYearMaxFilter(this.state.yearMaxFilterString);
+            this.props.filterStore.addPriceMinFilter(this.state.priceMinFilter);
+            this.props.filterStore.addPriceMaxFilter(this.state.priceMaxFilter);
+            this.props.filterStore.addCountryFilter(this.state.selectedCountryFilter);
+            this.props.filterStore.addPackagingFilter(this.state.selectedPackagingFilter);
+            this.props.filterStore.addProductSelectionFilter(this.state.selectedProductSelectionFilter);
+
+            // Reset Pagination when selecting filters
+            this.props.paginationStore.reset();
+        }
+        this.setState({modalVisible: visible});
     }
 
     render() {
         return (
-            <div className="filterContainer">
-                <Accordion>
-                    <Card>
-                        <Card.Header className="filterHeader">
-                            <h5 style={{ display: "inline-block" }}>Filtrering</h5>
-                            <div onClick={this.resetFilters} className="resetButton" variant="outline-secondary">
-                                <img src="cancel_icon.svg" alt="x" className="cancelIcon"></img>
-                                <p className="resetText" style={{ display: "inline-block" }}>Nullstill filtrering</p>
-                            </div>
+            <View style={styles.filterButtonContainer} >
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    >
+                    <ScrollView style={{marginTop: 22}}>
+                        <View>
+                            <List.Section title="Filters">
+                                <List.Accordion
+                                title="Land"
+                                left={props => <List.Icon {...props} icon="crosshairs-gps" />}
+                                >
+                                <View style={styles.filterButtonGroup}>
+                                    {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilterId)}
+                                </View>
+                                </List.Accordion>
 
-                        </Card.Header>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0" className="cardHeader">
-                            Land
-                    </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilter)}
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="1" className="cardHeader">
-                            Årgang
-                    </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="1">
-                            <Card.Body>
-                                <div className="slider">
-                                    <Nouislider
-                                        range={{ min: 1930, max: 2019 }}
-                                        step={1}
-                                        connect={true}
-                                        start={[this.state.yearMinFilter, this.state.yearMaxFilter]}
-                                        tooltips
-                                        format={wNumb({ decimals: 0 })}
-                                        onChange={this.handleYearSliderUpdate}
+                                <List.Accordion
+                                title="Årgang"
+                                left={props => <List.Icon {...props} icon="calendar-range" />}
+                                >
+                                <View style={styles.sliderContainer}>
+                                    <Text>{this.state.yearMinFilterInt} - {this.state.yearMaxFilterInt}</Text>
+                                    <MultiSlider
+                                        values={[this.state.yearMinFilterInt, this.state.yearMaxFilterInt]}
+                                        sliderLength={Dimensions.get('window').width/1.5}
+                                        onValuesChange={this.handleYearSliderUpdate}
+                                        min={1930}
+                                        max={2019}
                                     />
-                                    <p className="sliderValues">{this.state.yearMinFilter} - {this.state.yearMaxFilter}</p>
-                                </div>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="2" className="cardHeader">
-                            Pris
-                    </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="2">
-                            <Card.Body>
-                                <div className="slider">
-                                    <Nouislider
-                                        range={{
-                                            'min': [1],
-                                            '10%': [100, 10],
-                                            '50%': [500, 100],
-                                            '70%': [2000, 1000],
-                                            'max': [50000, 10000]
-                                        }}
-                                        step={1}
-                                        connect={true}
-                                        start={[this.props.filterStore.priceMinFilter, this.props.filterStore.priceMaxFilter]}
-                                        tooltips={true}
-                                        format={wNumb({ decimals: 0 })}
-                                        onChange={this.handlePriceSliderUpdate}
+                                </View>
+                                </List.Accordion>
+
+                                <List.Accordion
+                                title="Pris"
+                                left={props => <List.Icon {...props} icon="currency-usd" />}
+                                >
+                                <View style={styles.sliderContainer}>
+                                    <Text>{this.state.priceMinFilter} - {this.state.priceMaxFilter}</Text>
+                                    <MultiSlider
+                                        values={[this.state.priceMinFilter, this.state.priceMaxFilter]}
+                                        sliderLength={Dimensions.get('window').width/1.5}
+                                        onValuesChange={this.handlePriceSliderUpdate}
+                                        min={0}
+                                        max={10000}
+                                        step={100}
                                     />
-                                    <p className="sliderValues">{this.props.filterStore.priceMinFilter} - {this.props.filterStore.priceMaxFilter}</p>
-                                </div>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="3" className="cardHeader">
-                            Emballasjetype
-                    </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="3">
-                            <Card.Body>
-                                {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilter)}
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="4" className="cardHeader">
-                            Produktutvalg
-                    </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="4">
-                            <Card.Body>
-                                {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilter)}
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
-            </div>
+                                </View>
+                                </List.Accordion>
+
+                                <List.Accordion
+                                title="Emballasjetype"
+                                left={props => <List.Icon {...props} icon="package" />}
+                                >
+                                <View style={styles.filterButtonGroup}>
+                                    {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilterId)}
+                                </View>
+                                </List.Accordion>
+
+                                <List.Accordion
+                                title="Produktutvalg"
+                                left={props => <List.Icon {...props} icon="bottle-wine" />}
+                                >
+                                <View style={styles.filterButtonGroup}>
+                                    {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilterId)}
+                                </View>
+                                </List.Accordion>
+                            </List.Section>
+                        </View>
+                    </ScrollView>
+                    <View style={styles.applyButtonContainer}>
+                        <TouchableOpacity
+                            onPress={() => this.setModalVisible(!this.state.modalVisible)}
+                            style={styles.applyButton}
+                        >
+                            <Icon
+                                type='material'
+                                name='done'
+                                color='#fff'
+                                size={30}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+                <TouchableOpacity
+                    onPress={() => this.setModalVisible(true)}
+                    style={styles.filterButton}
+                >
+                    <Icon
+                        type='material-community'
+                        name='filter'
+                        color='#fff'
+                        size={30}
+                    />
+                </TouchableOpacity>
+            </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+
+    filterButtonContainer: {
+        position: "absolute",
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: '89%',
+        left: '75%',
+    },
+    filterButton: {
+        height: 50,
+        width: 50,
+        borderRadius: 100,
+        paddingTop: 7,
+        backgroundColor: '#2f95dc',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    applyButtonContainer: {
+        position: "absolute",
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: '85%',
+        left: '39%',
+    },
+    applyButton: {
+        height: 50,
+        width: 50,
+        borderRadius: 100,
+        backgroundColor: '#2f95dc',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    filterButtonGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginRight: 40,
+    },
+    buttonStyle: {
+        margin: 5,
+        borderColor: 'grey',
+    },
+    sliderContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: '10%',
+    }
+})
+
 
 export default inject("filterStore", "paginationStore")(observer(FilterGroup));

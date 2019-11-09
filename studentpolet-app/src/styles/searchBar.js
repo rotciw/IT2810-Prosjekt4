@@ -4,17 +4,17 @@ import {
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingBottom: 22,
-        paddingTop: 22,
+        paddingBottom: 15,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#2D2D2D',
     },
     textInput: {
         height: 50,
         width: 300,
-        borderColor: '#2D2D2D',
-        borderWidth: 1,
+        borderColor: 'white',
+        color: 'white',
+        borderWidth: 2,
         borderRadius: 10,
         paddingLeft: 20,
         paddingRight: 20,
