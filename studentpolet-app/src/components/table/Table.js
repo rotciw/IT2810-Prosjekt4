@@ -11,7 +11,7 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
+            isLoading: false,
             item: {}
         }
     }
@@ -71,12 +71,16 @@ class Table extends Component {
         />
     )
 
-    renderFooter = () => {
-        return (
-            <View style={styles.activity}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        )
+    renderFooter = (loading) => {
+        if (this.state.isLoading){
+            return null
+        }else{
+            return (
+                <View style={styles.activity}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            )
+        }
     }
 
     handleLoadMore = (fetchMore) => {
@@ -97,8 +101,10 @@ class Table extends Component {
             ),
             updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
+                    this.setState({isLoading: true})
                     return prev;
                 }
+                this.setState({isLoading: false})
                 return {
                     // Concatenate the new feed results after the old ones
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
@@ -146,13 +152,13 @@ class Table extends Component {
                     return (
                         <View>
                         <FlatList
-                            contentContainerStyle={{ paddingBottom: 35 }}
+                            contentContainerStyle={{ paddingBottom: '40%' }}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
                             // ListHeaderComponent={this.renderHeader}
-                            ListFooterComponent={this.renderFooter}
-                            onEndReached={() => this.handleLoadMore(fetchMore)}
+                            ListFooterComponent={this.renderFooter(loading)}
+                            onEndReached={() => {this.handleLoadMore(fetchMore)}}
                             onEndReachedThreshold={0.1}
                         />
                         <ItemModal
@@ -168,6 +174,8 @@ class Table extends Component {
                             itemPackaging={this.state.item.Emballasjetype}
                             itemSelection={this.state.item.Produktutvalg}
                             itemLink={this.state.item.Vareurl}
+                            itemAlcoholPerNok={this.state.item.AlkoholPrKrone}
+                            itemPrice={this.state.item.Pris}
                         />
                         </View>
                     );
