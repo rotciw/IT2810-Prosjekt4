@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
         fontSize: 25,
         color: 'white',
         textAlign: 'center',
+        fontWeight: 'bold'
     },
     container: {
         display: 'flex',
