@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { View } from 'react-native';
 import { styles } from '../../styles/searchBar';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 
 class HeaderSearchBar extends Component {
   constructor(props) {
