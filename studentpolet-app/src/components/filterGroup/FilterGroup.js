@@ -27,6 +27,7 @@ class FilterGroup extends Component {
             selectedCountryFilterId: "",
             selectedPackagingFilterId: "",
             selectedProductSelectionFilterId: "",
+            selectedSortingId: 0,
             selectedCountryFilter: "",
             selectedPackagingFilter: "",
             selectedProductSelectionFilter: "",
@@ -48,6 +49,8 @@ class FilterGroup extends Component {
             this.setState({ selectedPackagingFilterId: i, selectedPackagingFilter: name });
         } else if (filterGroup === 2) {
             this.setState({ selectedProductSelectionFilterId: i, selectedProductSelectionFilter: name });
+        } else if (filterGroup === 3){
+            this.setState({selectedSortingId: i })
         }
         // Reset Pagination when selecting a filter
         this.props.paginationStore.reset();
@@ -114,6 +117,16 @@ class FilterGroup extends Component {
             this.props.filterStore.addPackagingFilter(this.state.selectedPackagingFilter);
             this.props.filterStore.addProductSelectionFilter(this.state.selectedProductSelectionFilter);
 
+            let sortId = this.state.selectedSortingId;
+            let sortBy = "";
+            if (sortId === 0) sortBy = '-AlkoholPrKrone';
+            else if (sortId === 1) sortBy = 'AlkoholPrKrone';
+            else if (sortId === 2) sortBy = '-Alkohol';
+            else if (sortId === 3) sortBy = 'Alkohol';
+            else if (sortId === 4) sortBy = '-Pris';
+            else if (sortId === 5) sortBy = 'Pris';
+            this.props.sortStore.addSortAfter(sortBy)
+
             // Reset Pagination when selecting filters
             this.props.paginationStore.reset();
         }
@@ -130,7 +143,17 @@ class FilterGroup extends Component {
                     >
                     <ScrollView style={{marginTop: 22}}>
                         <View>
-                            <List.Section title="Filters">
+                            <List.Section title="Sortering">
+                                <List.Accordion
+                                    title="Sorter etter"
+                                    left={props => <List.Icon {...props} icon="sort" />}
+                                    >
+                                    <View style={styles.filterButtonGroup}>
+                                        {this.renderFilters(3, ['Alkohol pr. krone (høy til lav)', 'Alkohol pr. krone (lav til høy)','Alkoholprosent (høy til lav)','Alkoholprosent (lav til høy)','Pris (høy til lav)','Pris (lav til høy)'], this.state.selectedSortingId)}
+                                    </View>
+                                </List.Accordion>
+                            </List.Section>
+                            <List.Section title="Filtrering">
                                 <List.Accordion
                                 title="Land"
                                 left={props => <List.Icon {...props} icon="crosshairs-gps" />}
@@ -276,4 +299,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default inject("filterStore", "paginationStore")(observer(FilterGroup));
+export default inject("filterStore", "paginationStore", "sortStore")(observer(FilterGroup));
