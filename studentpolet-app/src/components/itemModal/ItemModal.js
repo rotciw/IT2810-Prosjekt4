@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import { styles } from '../../styles/itemModal';
 import { Ionicons } from '@expo/vector-icons';
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { string } from 'prop-types';
 import FavoriteTable from '../favoriteTable/FavoriteTable'
 
@@ -11,24 +11,24 @@ import FavoriteTable from '../favoriteTable/FavoriteTable'
 function ItemModal(props) {
     storeData = async (favorite) => {
         try {
-          let data = await AsyncStorage.getItem('Favorites') || [];          
-          if (typeof data === 'string'){
-            data = JSON.parse(data);
-          }
-          data.push(favorite);
-          await AsyncStorage.removeItem('Favorites');
-          await AsyncStorage.setItem('Favorites', JSON.stringify(data));
+            let data = await AsyncStorage.getItem('Favorites') || [];
+            if (typeof data === 'string') {
+                data = JSON.parse(data);
+            }
+            data.push(favorite);
+            await AsyncStorage.removeItem('Favorites');
+            await AsyncStorage.setItem('Favorites', JSON.stringify(data));
         } catch (error) {
-          // Error saving data
-          console.log(error);
+            // Error saving data
+            console.log(error);
         }
-      };
+    };
     return (
         <Modal
             animationType="slide"
             transparent={false}
             visible={props.modalStore.modalVisible}
-            onRequestClose={()=>props.modalStore.setModalInvisible()}
+            onRequestClose={() => props.modalStore.setModalInvisible()}
         >
             <SafeAreaView style={styles.container}>
                 <View>
@@ -64,7 +64,13 @@ function ItemModal(props) {
                     </View>
                     <View style={styles.divider}>
                         <Text>
+                            Alkohol Pr. Krone:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPerNok} kr</Text>
+                        </Text>
+                        <Text>
                             Literpris:<Text style={{ fontWeight: "bold" }}> {props.itemLitrePrice} kr</Text>
+                        </Text>
+                        <Text>
+                            Pris:<Text style={{ fontWeight: "bold" }}> {props.itemPrice} kr</Text>
                         </Text>
                         <Text>
                             Emballasjetype:<Text style={{ fontWeight: "bold" }}> {props.itemPackaging}</Text>
@@ -79,22 +85,24 @@ function ItemModal(props) {
                             }}>
                             Link til produktet</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { 
+                    <TouchableOpacity onPress={() => {
                         this.storeData(
-                            {"Varenummer":props.itemNumber,
-                            "Varenavn":props.itemName,
-                            "Volum":props.itemVolume,
-                            "Pris":props.itemPrice,
-                            "Literpris":props.itemLitrePrice,
-                            "Varetype":props.itemType,
-                            "Produktutvalg":props.itemSelection,
-                            "Smak":props.itemTaste,
-                            "Land":props.itemCountry,
-                            "Argang":props.itemYear,
-                            "Alkohol":props.itemAlcoholPercentage,
-                            "AlkoholPrKrone":props.itemAlcoholPerNok,
-                            "Emballasjetype":props.itemPackaging,
-                            "Vareurl":props.itemLink})
+                            {
+                                "Varenummer": props.itemNumber,
+                                "Varenavn": props.itemName,
+                                "Volum": props.itemVolume,
+                                "Pris": props.itemPrice,
+                                "Literpris": props.itemLitrePrice,
+                                "Varetype": props.itemType,
+                                "Produktutvalg": props.itemSelection,
+                                "Smak": props.itemTaste,
+                                "Land": props.itemCountry,
+                                "Argang": props.itemYear,
+                                "Alkohol": props.itemAlcoholPercentage,
+                                "AlkoholPrKrone": props.itemAlcoholPerNok,
+                                "Emballasjetype": props.itemPackaging,
+                                "Vareurl": props.itemLink
+                            })
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons
