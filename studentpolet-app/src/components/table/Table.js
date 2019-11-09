@@ -184,6 +184,8 @@ class Table extends Component {
                             itemPackaging={this.state.item.Emballasjetype}
                             itemSelection={this.state.item.Produktutvalg}
                             itemLink={this.state.item.Vareurl}
+                            itemAlcoholPerNok={this.state.item.AlkoholPrKrone}
+                            itemPrice={this.state.item.Pris}
                         />
                         </View>
                     );
