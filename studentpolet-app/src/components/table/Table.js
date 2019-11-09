@@ -94,6 +94,7 @@ class Table extends Component {
 
     handleLoadMore = (fetchMore) => {
         this.props.paginationStore.currentPage += 1;
+
         fetchMore({
             query: this.refreshQuery(
                 this.props.searchBarStore.searchBarValue,
@@ -138,7 +139,7 @@ class Table extends Component {
                 )
             }>
                 {({ loading, error, data, fetchMore }) => {
-                    if (loading) {
+                    if (loading && !data) {
                         return (
                             <FlatList
                                 contentContainerStyle={{ paddingBottom: 35 }}

@@ -80,8 +80,8 @@ class FilterGroup extends Component {
     }
     handlePriceSliderUpdate = values => {
         this.setState({
-            priceMinFilter: values[0].toFixed(0),
-            priceMaxFilter: values[1].toFixed(0),
+            priceMinFilter: values[0],
+            priceMaxFilter: values[1],
         });
     }
 
@@ -109,7 +109,7 @@ class FilterGroup extends Component {
             this.props.filterStore.addYearMinFilter(this.state.yearMinFilterString);
             this.props.filterStore.addYearMaxFilter(this.state.yearMaxFilterString);
             this.props.filterStore.addPriceMinFilter(this.state.priceMinFilter);
-            this.props.filterStore.addPriceMaxFilter(parseInt(this.state.priceMaxFilter));
+            this.props.filterStore.addPriceMaxFilter(this.state.priceMaxFilter);
             this.props.filterStore.addCountryFilter(this.state.selectedCountryFilter);
             this.props.filterStore.addPackagingFilter(this.state.selectedPackagingFilter);
             this.props.filterStore.addProductSelectionFilter(this.state.selectedProductSelectionFilter);
@@ -163,11 +163,12 @@ class FilterGroup extends Component {
                                 <View style={styles.sliderContainer}>
                                     <Text>{this.state.priceMinFilter} - {this.state.priceMaxFilter}</Text>
                                     <MultiSlider
-                                        values={[parseInt(this.state.priceMinFilter), parseInt(this.state.priceMaxFilter)]}
+                                        values={[this.state.priceMinFilter, this.state.priceMaxFilter]}
                                         sliderLength={Dimensions.get('window').width/1.5}
                                         onValuesChange={this.handlePriceSliderUpdate}
                                         min={0}
                                         max={10000}
+                                        step={100}
                                     />
                                 </View>
                                 </List.Accordion>
