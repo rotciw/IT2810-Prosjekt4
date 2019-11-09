@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import { styles } from '../../styles/itemModal';
@@ -9,21 +9,57 @@ import FavoriteTable from '../favoriteTable/FavoriteTable'
 
 
 function ItemModal(props) {
-    storeData = async (favorite) => {
+
+    const [favoriteIcon, setFavoriteIcon] = useState("md-heart-empty");
+
+    updateFavorites = async (favorite) => {
         try {
-          let data = await AsyncStorage.getItem('Favorites') || [];          
-          if (typeof data === 'string'){
-            data = JSON.parse(data);
+            let data = await AsyncStorage.getItem('Favorites') || [];          
+            if (typeof data === 'string'){
+              data = JSON.parse(data);
+            }
+            let isRemoved = false;
+            for(let i = data.length - 1; i >= 0; i--) {
+                if(data[i].Varenummer == favorite.Varenummer) {
+                    //Fjerner data om det allerede finnes
+                   data.splice(i, 1);
+                   isRemoved = true;
+                   console.log("Data removed")
+                }
+            }
+            if (!isRemoved){
+                //Legger til data om det ikke finnes fra før
+                data.push(favorite);
+                console.log("Data added");
+            }
+            await AsyncStorage.removeItem('Favorites');
+            await AsyncStorage.setItem('Favorites', JSON.stringify(data));
+          } catch (error) {
+            // Error saving data
+            console.log(error);
           }
-          data.push(favorite);
-          await AsyncStorage.removeItem('Favorites');
-          await AsyncStorage.setItem('Favorites', JSON.stringify(data));
-        } catch (error) {
-          // Error saving data
-          console.log(error);
+    };
+
+    isFavorite = async (itemNumber) => {
+        let data = await AsyncStorage.getItem('Favorites') || [];
+        for(let i = data.length - 1; i >= 0; i--) {
+            if(data[i].Varenummer === itemNumber) {
+               return true;
+            }
         }
-      };
+        return false;
+    }
+    
+    whenSelected = () => {
+        if(isFavorite){
+            setFavoriteIcon('md-heart');
+        } else{
+            setFavoriteIcon('md-heart-empty');
+        }
+    }
+
     return (
+        
         <Modal
             animationType="slide"
             transparent={false}
@@ -80,7 +116,7 @@ function ItemModal(props) {
                             Link til produktet</Text>
                     </View>
                     <TouchableOpacity onPress={() => { 
-                        this.storeData(
+                        this.updateFavorites(
                             {"Varenummer":props.itemNumber,
                             "Varenavn":props.itemName,
                             "Volum":props.itemVolume,
@@ -94,11 +130,12 @@ function ItemModal(props) {
                             "Alkohol":props.itemAlcoholPercentage,
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
-                            "Vareurl":props.itemLink})
+                            "Vareurl":props.itemLink}),
+                            this.whenSelected()
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons
-                                name="md-heart-empty"
+                                name={favoriteIcon}
                                 color="white"
                                 size={16}
                             />
