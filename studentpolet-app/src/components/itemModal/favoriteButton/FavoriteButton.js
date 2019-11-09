@@ -41,25 +41,24 @@ function ItemModal(props) {
     };
 
     isFavorite = async (itemNumber) => {
-        try {
-            let data = await AsyncStorage.getItem('Favorites') || [];
-            data = JSON.parse(data);
-            console.log(data)
-            let found = false;
-            for(let i = data.length - 1; i >= 0; i--) {
-                if(data[i].Varenummer === itemNumber) {
-                setFavoriteIcon('md-heart');
-                found = true
-                }
+        let data = await AsyncStorage.getItem('Favorites') || [];
+        data = JSON.parse(data)
+        for(let i = data.length - 1; i >= 0; i--) {
+            if(data[i].Varenummer === itemNumber) {
+               return true;
+            }
         }
-        if (!found){
+        return false;
+    }
+    
+    whenSelected = () => {
+        if(isFavorite){
+            setFavoriteIcon('md-heart');
+        } else{
             setFavoriteIcon('md-heart-empty');
         }
-        } catch (error){
-            
-        }
-        
     }
+
     return (
         
         <Modal
@@ -133,7 +132,7 @@ function ItemModal(props) {
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
                             "Vareurl":props.itemLink}),
-                            this.isFavorite(props.itemNumber)
+                            this.whenSelected()
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons
