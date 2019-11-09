@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from '@apollo/react-components';
 import { inject, observer } from 'mobx-react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
+import { styles } from '../../styles/searchBar';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -30,28 +31,11 @@ class SearchBar extends Component {
                 onChangeText={text => this.handleSubmit(text)}
                 value={this.state.searchBarValue}
                 placeholder="Navn, type, land.."
+                placeholderTextColor={'white'}
             />
         </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingBottom: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    textInput: {
-        height: 50,
-        width: 300,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingLeft: 20,
-        paddingRight: 20,
-    }
-})
 
 export default inject("searchBarStore", "paginationStore")(observer(SearchBar));

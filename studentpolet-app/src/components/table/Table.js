@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
-import { graphql } from 'react-apollo';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
+import { styles } from '../../styles/table';
 
 // Import Header and SearchBar component
-import Header from '../header/Header'
-import SearchBar from '../searchBar/SearchBar'
+import Header from '../header/Header';
+import SearchBar from '../searchBar/SearchBar';
+import ItemModal from '../itemModal/ItemModal';
 
-class Table extends Component{
-    constructor(props){
+class Table extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
+            item: {}
         }
     }
+
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
         yearMin = "", yearMax = "", priceMin = 0, priceMax = 10000,
         skipping = 0, sortAfter = "") {
@@ -53,36 +56,43 @@ class Table extends Component{
         return GET_PRODUCTQUERY;
     };
 
+
+    onPress(item) {
+        this.props.modalStore.setModalVisible()
+        this.setState({item: item})
+    }
+
     keyExtractor = (item, index) => index.toString()
 
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
-            leftAvatar={{ source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" } }}
+            leftAvatar={{ height: 64, width: 32, resizeMode: 'contain', source: { uri: "https://bilder.vinmonopolet.no/cache/200x200-0/" + item.Varenummer + "-1.jpg" } }}
+            subtitle={"Alkohol Pr. Krone: " + item.AlkoholPrKrone}
             chevron
             bottomDivider
+            onPress={() => this.onPress(item)}
         />
     )
 
     // Render Header and SearchBar component in the FlatList Header
-    renderHeader = () => {
-        return(
-            <View>
-                <Header/>
-                <SearchBar/>
-            </View>
-        )
-    }
+    // renderHeader = () => {
+    //     return (
+    //         // <View>
+    //         //     <Header />
+    //         //     <SearchBar />
+    //         // </View>
+    //     )
+    // }
     renderFooter = () => {
-        return(
+        return (
             <View style={styles.activity}>
-                <ActivityIndicator size="large" color="#0000ff"/>
+                <ActivityIndicator size="large" color="#0000ff" />
             </View>
         )
     }
 
     handleLoadMore = (fetchMore) => {
-        console.log("next page");
         this.props.paginationStore.currentPage += 1;
         fetchMore({
             query: this.refreshQuery(
@@ -97,7 +107,7 @@ class Table extends Component{
                 this.props.paginationStore.currentPage,
                 this.props.sortStore.sortAfter
             ),
-            updateQuery: (prev, {fetchMoreResult}) => {
+            updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
                     return prev;
                 }
@@ -108,6 +118,8 @@ class Table extends Component{
             }
         })
     };
+
+
 
     render() {
         return (
@@ -127,33 +139,49 @@ class Table extends Component{
             }>
                 {({ loading, error, data, fetchMore }) => {
                     if (loading) {
-                        return(
+                        return (
                             <FlatList
-                                contentContainerStyle={{ paddingBottom: 35}}
+                                contentContainerStyle={{ paddingBottom: 35 }}
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
-                                ListHeaderComponent={this.renderHeader}
+                                // ListHeaderComponent={this.renderHeader}
                                 ListFooterComponent={this.renderFooter}
                             />
                         )
                     };
-                    if (error) return(
+                    if (error) return (
                         <View style={styles.activity}>
                             <Text>`Error! ${error.message}`</Text>
                         </View>
                     );
                     return (
+                        <View>
                         <FlatList
-                            contentContainerStyle={{ paddingBottom: 35}}
+                            contentContainerStyle={{ paddingBottom: 35 }}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListHeaderComponent={this.renderHeader}
+                            // ListHeaderComponent={this.renderHeader}
                             ListFooterComponent={this.renderFooter}
                             onEndReached={() => this.handleLoadMore(fetchMore)}
                             onEndReachedThreshold={0.1}
                         />
+                        <ItemModal
+                            itemName={this.state.item.Varenavn}
+                            itemNumber={this.state.item.Varenummer}
+                            itemType={this.state.item.Varetype}
+                            itemCountry={this.state.item.Land}
+                            itemVolume={this.state.item.Volum}
+                            itemAlcoholPercentage={this.state.item.Alkohol}
+                            itemYear={this.state.item.Argang}
+                            itemTaste={this.state.item.Smak}
+                            itemLitrePrice={this.state.item.Literpris}
+                            itemPackaging={this.state.item.Emballasjetype}
+                            itemSelection={this.state.item.Produktutvalg}
+                            itemLink={this.state.item.Vareurl}
+                        />
+                        </View>
                     );
                 }}
             </Query>
@@ -162,36 +190,4 @@ class Table extends Component{
 
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingBottom: 22
-    },
-    refreshContainer: {
-        flex: 1,
-        padding: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    item: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-    },
-    activity: {
-        top: 20,
-        bottom: 50,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    refreshButton: {
-        height: 50,
-        width: 50,
-        borderRadius: 100,
-        backgroundColor: '#2f95dc',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
-
-export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore')(observer(Table));
+export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore', 'modalStore')(observer(Table));

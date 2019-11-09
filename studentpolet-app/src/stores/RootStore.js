@@ -3,6 +3,7 @@ import SearchBarStore from './SearchBarStore';
 import SortStore from './SortStore';
 import PaginationStore from './PaginationStore';
 import { decorate, observable, action } from 'mobx';
+import ModalStore from './ModalStore';
 
 // decorate the store variables with their types
 decorate(FilterStore, {
@@ -40,6 +41,12 @@ decorate(PaginationStore, {
     reset: action,
 });
 
+decorate(ModalStore, {
+    modalVisible: observable,
+    setModalVisible: action,
+    setModalInvisible: action
+})
+
 class RootStore {
     // Construct all stores
     constructor() {
@@ -47,6 +54,7 @@ class RootStore {
         this.sortStore = new SortStore();
         this.searchBarStore = new SearchBarStore();
         this.paginationStore = new PaginationStore();
+        this.modalStore = new ModalStore();
     }
 }
 
