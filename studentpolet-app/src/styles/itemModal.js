@@ -1,5 +1,5 @@
 import {
-    StyleSheet,
+    StyleSheet, Dimensions,
 } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -8,13 +8,13 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        alignSelf: 'stretch'
     },
     textContainer: {
         backgroundColor: '#2D2D2D',
         padding: 15,
         width: '100%',
-        margin:0,
+        alignSelf: 'stretch',
+        width: Dimensions.get('window').width
     },
     title: {
         textAlign: 'center',
