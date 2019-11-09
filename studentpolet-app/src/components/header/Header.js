@@ -10,7 +10,7 @@ export default function Header(props) {
   return (
     <View style={styles.container}>
       <Image style={{ width: 30, height: 30 }} source={require('../../assets/images/wine_glass.png')} />
-      <Text style={styles.headerText}>Studentpolet</Text>
+      <Text style={styles.headerText}>STUDENTPOLET</Text>
     </View>
   );
 }

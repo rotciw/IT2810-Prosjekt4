@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import { styles } from '../../styles/searchBar';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 
 class HeaderSearchBar extends Component {
   constructor(props) {
@@ -12,24 +12,33 @@ class HeaderSearchBar extends Component {
     };
   }
 
-  handleChange = (event) => {
+  handleChange = (text) => {
     this.setState({
-      searchBarValue: event
+      searchBarValue: text
     });
-    this.props.searchBarStore.addSearchBarValue(event);
+    this.props.searchBarStore.addSearchBarValue(text);
+  }
+
+  handleSubmit() {
+    this.props.searchBarStore.addSearchBarValue(this.state.searchBarValue);
+    //Reset pagination on search
+    this.props.paginationStore.reset();
   }
 
   render() {
     return (
-      <SearchBar
-        round
+      <View style={styles.container}>
+        <SearchBar
         lightTheme
+        round
+        platform="ios"
+        cancelButtonTitle="Avbryt"
         placeholder="Navn, type, land.."
-        containerStyle={styles.container}
-        inputStyle={styles.inputStyle}
         onChangeText={this.handleChange}
         value={this.state.searchBarValue}
-      />
+        containerStyle={styles.container}
+        />
+      </View>
     );
   }
 }

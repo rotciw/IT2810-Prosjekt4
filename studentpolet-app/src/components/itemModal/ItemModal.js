@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import { styles } from '../../styles/itemModal';
 import { Ionicons } from '@expo/vector-icons';
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { string } from 'prop-types';
 import FavoriteTable from '../favoriteTable/FavoriteTable'
 
@@ -66,7 +66,7 @@ function ItemModal(props) {
             animationType="slide"
             transparent={false}
             visible={props.modalStore.modalVisible}
-            onRequestClose={()=>props.modalStore.setModalInvisible()}
+            onRequestClose={() => props.modalStore.setModalInvisible()}
         >
             <SafeAreaView style={styles.container}>
                 <View>
@@ -102,7 +102,13 @@ function ItemModal(props) {
                     </View>
                     <View style={styles.divider}>
                         <Text>
+                            Alkohol Pr. Krone:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPerNok} kr</Text>
+                        </Text>
+                        <Text>
                             Literpris:<Text style={{ fontWeight: "bold" }}> {props.itemLitrePrice} kr</Text>
+                        </Text>
+                        <Text>
+                            Pris:<Text style={{ fontWeight: "bold" }}> {props.itemPrice} kr</Text>
                         </Text>
                         <Text>
                             Emballasjetype:<Text style={{ fontWeight: "bold" }}> {props.itemPackaging}</Text>

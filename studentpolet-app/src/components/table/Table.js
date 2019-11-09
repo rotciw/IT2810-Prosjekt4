@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
@@ -139,7 +139,6 @@ class Table extends Component {
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
-                                // ListHeaderComponent={this.renderHeader}
                                 ListFooterComponent={this.renderFooter}
                             />
                         )
@@ -152,11 +151,10 @@ class Table extends Component {
                     return (
                         <View>
                         <FlatList
-                            contentContainerStyle={{ paddingBottom: '40%' }}
+                            contentContainerStyle={{ paddingBottom: Dimensions.get('window').height/3.3 }}
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            // ListHeaderComponent={this.renderHeader}
                             ListFooterComponent={this.renderFooter(loading)}
                             onEndReached={() => {this.handleLoadMore(fetchMore)}}
                             onEndReachedThreshold={0.1}
