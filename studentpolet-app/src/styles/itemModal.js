@@ -28,7 +28,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
-        marginBottom: 10
+        marginBottom: 10,
+        marginHorizontal: 15
     },
     divider: {
         paddingBottom: 15,
