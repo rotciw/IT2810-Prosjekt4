@@ -139,7 +139,6 @@ class Table extends Component {
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
-                                // ListHeaderComponent={this.renderHeader}
                                 ListFooterComponent={this.renderFooter}
                             />
                         )
@@ -156,7 +155,6 @@ class Table extends Component {
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            // ListHeaderComponent={this.renderHeader}
                             ListFooterComponent={this.renderFooter(loading)}
                             onEndReached={() => {this.handleLoadMore(fetchMore)}}
                             onEndReachedThreshold={0.1}
