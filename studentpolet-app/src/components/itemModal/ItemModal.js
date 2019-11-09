@@ -9,7 +9,6 @@ import FavoriteTable from '../favoriteTable/FavoriteTable'
 
 
 function ItemModal(props) {
-    
     storeData = async (favorite) => {
         try {
           let data = await AsyncStorage.getItem('Favorites') || [];          
@@ -33,17 +32,8 @@ function ItemModal(props) {
         >
             <SafeAreaView style={styles.container}>
                 <View>
-<<<<<<< HEAD
-                    <View style={styles.divider}>
-                        <Image
-                            style={{ width: '100%', height: 200 }}
-                            resizeMode="center"
-                            source={{ uri: "https://bilder.vinmonopolet.no/cache/500x500-0/" + props.itemNumber + "-1.jpg" }} />
-
-=======
                     <View style={styles.textContainer}>
                         <Text style={styles.title}>{props.itemName}</Text>
->>>>>>> dev
                     </View>
                     <Image
                         style={{ width: '100%', height: 200 }}
@@ -89,7 +79,6 @@ function ItemModal(props) {
                             }}>
                             Link til produktet</Text>
                     </View>
-<<<<<<< HEAD
                     <TouchableOpacity onPress={() => { 
                         this.storeData(
                             {"Varenummer":props.itemNumber,
@@ -120,24 +109,6 @@ function ItemModal(props) {
                             <Text style={{ color: 'white' }}>Tilbake</Text>
                         </View>
                     </TouchableOpacity>
-=======
-                    <View style={styles.divider}>
-                        <TouchableOpacity onPress={() => { props.modalStore.setModalInvisible() }}>
-                            <View style={styles.backButton}                        >
-                                <Ionicons
-                                    name="md-heart-empty"
-                                    color="white"
-                                    size={16}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { props.modalStore.setModalInvisible() }}>
-                            <View style={styles.backButton}                        >
-                                <Text style={{ color: 'white' }}>Tilbake</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
->>>>>>> dev
                 </View>
             </SafeAreaView>
         </Modal >
