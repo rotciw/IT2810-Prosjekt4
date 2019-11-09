@@ -5,10 +5,6 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 import { styles } from '../../styles/table';
-
-// Import Header and SearchBar component
-import Header from '../header/Header';
-import SearchBar from '../searchBar/SearchBar';
 import ItemModal from '../itemModal/ItemModal';
 
 class Table extends Component {
@@ -75,15 +71,6 @@ class Table extends Component {
         />
     )
 
-    // Render Header and SearchBar component in the FlatList Header
-    // renderHeader = () => {
-    //     return (
-    //         // <View>
-    //         //     <Header />
-    //         //     <SearchBar />
-    //         // </View>
-    //     )
-    // }
     renderFooter = () => {
         return (
             <View style={styles.activity}>
