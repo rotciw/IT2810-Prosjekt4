@@ -10,7 +10,6 @@ import FavoriteTable from '../favoriteTable/FavoriteTable'
 
 function ItemModal(props) {
 
-    const [favoriteIcon, setFavoriteIcon] = useState("md-heart-empty");
 
     updateFavorites = async (favorite) => {
         try {
@@ -40,26 +39,8 @@ function ItemModal(props) {
           }
     };
 
-    isFavorite = async (itemNumber) => {
-        try {
-            let data = await AsyncStorage.getItem('Favorites') || [];
-            data = JSON.parse(data);
-            console.log(data)
-            let found = false;
-            for(let i = data.length - 1; i >= 0; i--) {
-                if(data[i].Varenummer === itemNumber) {
-                setFavoriteIcon('md-heart');
-                found = true
-                }
-        }
-        if (!found){
-            setFavoriteIcon('md-heart-empty');
-        }
-        } catch (error){
-            
-        }
-        
-    }
+    
+
     return (
         
         <Modal
@@ -139,11 +120,11 @@ function ItemModal(props) {
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
                             "Vareurl":props.itemLink}),
-                            this.isFavorite(props.itemNumber)
+                            this.props.setFavorite(props.itemNumber)
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons
-                                name={favoriteIcon}
+                                name={props.favoriteStore.favoriteIcon}
                                 color="white"
                                 size={16}
                             />

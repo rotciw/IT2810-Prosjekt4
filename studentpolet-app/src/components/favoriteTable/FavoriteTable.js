@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 import {AsyncStorage} from 'react-native';
+import {NavigationEvents} from 'react-navigation';
 
 
 
@@ -23,7 +24,7 @@ class FavoriteTable extends Component{
 
 
       
-    getMyValue = async () => {
+    getData = async () => {
       try {
         const value = await AsyncStorage.getItem('Favorites');
         this.setState({key:JSON.parse(value)});
@@ -33,9 +34,6 @@ class FavoriteTable extends Component{
         // read error
       }
     }
-      componentDidMount(){
-        this.getMyValue()
-      }
     
     renderItem = ({ item }) => (
         <ListItem
@@ -49,6 +47,7 @@ class FavoriteTable extends Component{
     render() {
         return(
             <View>
+              <NavigationEvents onDidFocus={() => this.getData()} />
               <FlatList
                 contentContainerStyle={{ paddingBottom: 35}}
                 keyExtractor={this.keyExtractor}

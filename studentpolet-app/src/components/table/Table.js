@@ -12,7 +12,7 @@ class Table extends Component {
         super(props);
         this.state = {
             isLoading: false,
-            item: {}
+            item: {},
         }
     }
 
@@ -56,6 +56,7 @@ class Table extends Component {
     onPress(item) {
         this.props.modalStore.setModalVisible()
         this.setState({item: item})
+        this.props.favoriteStore.setFavorite(item.Varenummer)
     }
 
     keyExtractor = (item, index) => index.toString()
@@ -184,4 +185,9 @@ class Table extends Component {
 
 }
 
-export default inject('sortStore', 'filterStore', 'searchBarStore', 'paginationStore', 'modalStore')(observer(Table));
+export default inject('sortStore',
+ 'filterStore',
+  'searchBarStore',
+   'paginationStore',
+    'modalStore',
+    'favoriteStore')(observer(Table));

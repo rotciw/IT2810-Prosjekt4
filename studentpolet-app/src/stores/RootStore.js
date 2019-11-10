@@ -4,6 +4,7 @@ import SortStore from './SortStore';
 import PaginationStore from './PaginationStore';
 import { decorate, observable, action } from 'mobx';
 import ModalStore from './ModalStore';
+import FavoriteStore from './FavoriteStore';
 
 // decorate the store variables with their types
 decorate(FilterStore, {
@@ -47,6 +48,11 @@ decorate(ModalStore, {
     setModalInvisible: action
 })
 
+decorate(FavoriteStore, {
+    favoriteIcon: observable,
+    setFavorite: action
+})
+
 class RootStore {
     // Construct all stores
     constructor() {
@@ -55,6 +61,7 @@ class RootStore {
         this.searchBarStore = new SearchBarStore();
         this.paginationStore = new PaginationStore();
         this.modalStore = new ModalStore();
+        this.favoriteStore = new FavoriteStore();
     }
 }
 

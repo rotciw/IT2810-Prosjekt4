@@ -46,6 +46,7 @@ export default function App(props) {
           searchBarStore={rootStore.searchBarStore}
           paginationStore={rootStore.paginationStore}
           modalStore={rootStore.modalStore}
+          favoriteStore={rootStore.favoriteStore}
         >
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
