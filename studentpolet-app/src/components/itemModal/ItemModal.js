@@ -20,19 +20,16 @@ function ItemModal(props) {
                     //Fjerner data om det allerede finnes
                    data.splice(i, 1);
                    isRemoved = true;
-                   console.log("Data removed")
                 }
             }
             if (!isRemoved){
                 //Legger til data om det ikke finnes fra før
                 data.push(favorite);
-                console.log("Data added");
             }
             await AsyncStorage.removeItem('Favorites');
             await AsyncStorage.setItem('Favorites', JSON.stringify(data));
           } catch (error) {
             // Error saving data
-            console.log(error);
           }
           props.favoriteStore.setFavorite(props.itemNumber)
         };
