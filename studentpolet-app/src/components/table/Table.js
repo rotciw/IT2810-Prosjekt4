@@ -10,17 +10,19 @@ import ItemModal from '../itemModal/ItemModal';
 class Table extends Component {
     constructor(props) {
         super(props);
+        // These states are used local state control within this component
         this.state = {
             isLoading: true,
             item: {}
         }
     }
 
+    // Query to backend
     refreshQuery(keys = "", packaging = "", productSelection = "", country = "",
         yearMin = "", yearMax = "", priceMin = 0, priceMax = 10000,
         skipping = 0, sortAfter = "") {
 
-        // Availbale queries
+        // Available queries to use, these are in norwegian as Vinmonopolets data was in Norwegian
         const GET_PRODUCTQUERY = gql`
             {
                 productQuery(Keys: "${keys}",
@@ -54,18 +56,23 @@ class Table extends Component {
 
 
     onPress(item) {
+        // Show a modal, and check favorite state
         this.props.modalStore.setModalVisible()
-        this.setState({item: item})
+        this.setState({ item: item })
         this.props.favoriteStore.setFavorite(item.Varenummer)
-        console.log("table komp " + this.props.favoriteStore.favoriteIcon)
-    }
+    };
 
+    // Key for flatlist
     keyExtractor = (item, index) => index.toString()
 
+    // For each item in the list, render a ListItem
     renderItem = ({ item }) => (
         <ListItem
             title={item.Varenavn}
-            leftAvatar={{ height: 64, width: 32, resizeMode: 'contain', source: { uri: "https://bilder.vinmonopolet.no/cache/200x200-0/" + item.Varenummer + "-1.jpg" } }}
+            leftAvatar={{
+                height: 64, width: 32, resizeMode: 'contain',
+                source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" }
+            }}
             subtitle={"Alkohol Pr. Krone: " + item.AlkoholPrKrone}
             chevron
             bottomDivider
@@ -74,13 +81,14 @@ class Table extends Component {
     )
 
     renderFooter = (length) => {
-        if (length === 0){
-            return(
-                <Text style={{textAlign: "center", top: 50}}>Ingen resultater</Text>
+        // Rendering the footer which is either no result or a loading icon
+        if (length === 0) {
+            return (
+                <Text style={{ textAlign: "center", top: 50 }}>Ingen resultater</Text>
             )
-        }else if (!this.state.isLoading){
+        } else if (!this.state.isLoading) {
             return null
-        }else{
+        } else {
             return (
                 <View style={styles.activity}>
                     <ActivityIndicator size="large" color="#0000ff" />
@@ -90,6 +98,7 @@ class Table extends Component {
     }
 
     handleLoadMore = (fetchMore) => {
+        // Handling dynamic pagination
         this.props.paginationStore.currentPage += 1;
 
         fetchMore({
@@ -107,10 +116,10 @@ class Table extends Component {
             ),
             updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
-                    this.setState({isLoading: false})
+                    this.setState({ isLoading: false })
                     return prev;
                 }
-                this.setState({isLoading: true})
+                this.setState({ isLoading: true })
                 return {
                     // Concatenate the new feed results after the old ones
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
@@ -139,9 +148,9 @@ class Table extends Component {
             }>
                 {({ loading, error, data, fetchMore }) => {
                     if (loading && !data) {
+                        // When loading and no data, render an empty table
                         return (
                             <FlatList
-                                contentContainerStyle={{ paddingBottom: 35 }}
                                 keyExtractor={this.keyExtractor}
                                 data={[]}
                                 renderItem={this.renderItem}
@@ -156,32 +165,33 @@ class Table extends Component {
                     );
                     return (
                         <View>
-                        <FlatList
-                            contentContainerStyle={{ paddingBottom: Dimensions.get('window').height/3.3 }}
-                            keyExtractor={this.keyExtractor}
-                            data={data.productQuery}
-                            renderItem={this.renderItem}
-                            ListFooterComponent={this.renderFooter(data.productQuery.length)}
-                           //ListEmptyComponent={this.handleNoData}
-                            onEndReached={() => {this.handleLoadMore(fetchMore)}}
-                            onEndReachedThreshold={0.1}
-                        />
-                        <ItemModal
-                            itemName={this.state.item.Varenavn}
-                            itemNumber={this.state.item.Varenummer}
-                            itemType={this.state.item.Varetype}
-                            itemCountry={this.state.item.Land}
-                            itemVolume={this.state.item.Volum}
-                            itemAlcoholPercentage={this.state.item.Alkohol}
-                            itemYear={this.state.item.Argang}
-                            itemTaste={this.state.item.Smak}
-                            itemLitrePrice={this.state.item.Literpris}
-                            itemPackaging={this.state.item.Emballasjetype}
-                            itemSelection={this.state.item.Produktutvalg}
-                            itemLink={this.state.item.Vareurl}
-                            itemAlcoholPerNok={this.state.item.AlkoholPrKrone}
-                            itemPrice={this.state.item.Pris}
-                        />
+                            {/* List when there are data */}
+                            <FlatList
+                                contentContainerStyle={{ paddingBottom: Dimensions.get('window').height / 3.3 }}
+                                keyExtractor={this.keyExtractor}
+                                data={data.productQuery}
+                                renderItem={this.renderItem}
+                                ListFooterComponent={this.renderFooter(data.productQuery.length)}
+                                onEndReached={() => { this.handleLoadMore(fetchMore) }}
+                                onEndReachedThreshold={0.1}
+                            />
+                            {/* The modal with data we want to show item props */}
+                            <ItemModal
+                                itemName={this.state.item.Varenavn}
+                                itemNumber={this.state.item.Varenummer}
+                                itemType={this.state.item.Varetype}
+                                itemCountry={this.state.item.Land}
+                                itemVolume={this.state.item.Volum}
+                                itemAlcoholPercentage={this.state.item.Alkohol}
+                                itemYear={this.state.item.Argang}
+                                itemTaste={this.state.item.Smak}
+                                itemLitrePrice={this.state.item.Literpris}
+                                itemPackaging={this.state.item.Emballasjetype}
+                                itemSelection={this.state.item.Produktutvalg}
+                                itemLink={this.state.item.Vareurl}
+                                itemAlcoholPerNok={this.state.item.AlkoholPrKrone}
+                                itemPrice={this.state.item.Pris}
+                            />
                         </View>
                     );
                 }}
@@ -192,8 +202,8 @@ class Table extends Component {
 }
 
 export default inject('sortStore',
- 'filterStore',
-  'searchBarStore',
-   'paginationStore',
+    'filterStore',
+    'searchBarStore',
+    'paginationStore',
     'modalStore',
     'favoriteStore')(observer(Table));
