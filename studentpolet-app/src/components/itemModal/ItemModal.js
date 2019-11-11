@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import { styles } from '../../styles/itemModal';
@@ -9,8 +9,7 @@ import FavoriteTable from '../favoriteTable/FavoriteTable'
 
 
 function ItemModal(props) {
-
-
+    //const [currentFavoriteIcon, checkFavoriteIcon] = useState('md-heart-empty');
     updateFavorites = async (favorite) => {
         try {
             let data = await AsyncStorage.getItem('Favorites') || [];          
@@ -37,8 +36,9 @@ function ItemModal(props) {
             // Error saving data
             console.log(error);
           }
-    };
-
+          props.favoriteStore.setFavorite(props.itemNumber)
+        };
+ 
     
 
     return (
@@ -119,8 +119,9 @@ function ItemModal(props) {
                             "Alkohol":props.itemAlcoholPercentage,
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
-                            "Vareurl":props.itemLink}),
-                            props.favoriteStore.setFavorite(props.itemNumber)
+                            "Vareurl":props.itemLink})
+                            
+
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons

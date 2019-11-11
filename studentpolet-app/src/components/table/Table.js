@@ -57,6 +57,7 @@ class Table extends Component {
         this.props.modalStore.setModalVisible()
         this.setState({item: item})
         this.props.favoriteStore.setFavorite(item.Varenummer)
+        console.log("table komp " + this.props.favoriteStore.favoriteIcon)
     }
 
     keyExtractor = (item, index) => index.toString()

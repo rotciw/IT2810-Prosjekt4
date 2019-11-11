@@ -8,7 +8,7 @@ class FavoriteStore {
         try {
             let data = await AsyncStorage.getItem('Favorites') || [];
             data = JSON.parse(data);
-            console.log(data)
+  
             let found = false;
             for(let i = data.length - 1; i >= 0; i--) {
                 if(data[i].Varenummer === itemNumber) {
