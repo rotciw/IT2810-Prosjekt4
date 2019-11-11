@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import {
-    StyleSheet,
     Text,
     View,
     ScrollView,
     TouchableOpacity,
     Modal,
-    TouchableHighlight,
     Dimensions,
+    StatusBar,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import { List, Checkbox } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { styles } from '../../styles/filterGroup';
 
 let filterData = require("./FilterData");
 
@@ -49,8 +49,8 @@ class FilterGroup extends Component {
             this.setState({ selectedPackagingFilterId: i, selectedPackagingFilter: name });
         } else if (filterGroup === 2) {
             this.setState({ selectedProductSelectionFilterId: i, selectedProductSelectionFilter: name });
-        } else if (filterGroup === 3){
-            this.setState({selectedSortingId: i })
+        } else if (filterGroup === 3) {
+            this.setState({ selectedSortingId: i })
         }
         // Reset Pagination when selecting a filter
         this.props.paginationStore.reset();
@@ -61,13 +61,15 @@ class FilterGroup extends Component {
         const buttons = buttonNames.map((name, i) => {
             const buttonType = i === selectedFilter ? "solid" : "outline";
             return (
-                <Button
-                    key={i}
-                    title={name}
-                    type={buttonType}
-                    style={styles.buttonStyle}
-                    onPress={() => { this.selectButton(filterGroup, name, i); }}
-                />
+                <View key={i} style={styles.buttonContainer}>
+                    <Button
+                        key={i}
+                        title={name}
+                        type={buttonType}
+                        style={styles.buttonStyle}
+                        onPress={() => { this.selectButton(filterGroup, name, i); }}
+                    />
+                </View>
             );
         });
         return buttons;
@@ -144,97 +146,100 @@ class FilterGroup extends Component {
             // Reset Pagination when selecting filters
             this.props.paginationStore.reset();
         }
-        this.setState({modalVisible: visible});
+        this.setState({ modalVisible: visible });
     }
 
     render() {
         return (
-            <View style={styles.filterButtonContainer} >
+            <View style={styles.filterButtonContainer}>
                 <Modal
                     animationType="slide"
                     transparent={false}
                     visible={this.state.modalVisible}
                     onRequestClose={() => this.setModalVisible(!this.state.modalVisible)}
-                    >
-                    <ScrollView style={{marginTop: 22}}>
+                >
+                    <ScrollView>
                         <View>
                             <List.Section title="Sortering">
                                 <List.Accordion
                                     title="Sorter etter"
                                     left={props => <List.Icon {...props} icon="sort" />}
-                                    >
+                                >
                                     <View style={styles.filterButtonGroup}>
-                                        {this.renderFilters(3, ['Alkohol pr. krone (høy til lav)', 'Alkohol pr. krone (lav til høy)','Alkoholprosent (høy til lav)','Alkoholprosent (lav til høy)','Pris (høy til lav)','Pris (lav til høy)'], this.state.selectedSortingId)}
+                                        {this.renderFilters(3, ['Alkohol pr. krone (høy til lav)', 'Alkohol pr. krone (lav til høy)', 'Alkoholprosent (høy til lav)', 'Alkoholprosent (lav til høy)', 'Pris (høy til lav)', 'Pris (lav til høy)'], this.state.selectedSortingId)}
                                     </View>
                                 </List.Accordion>
                             </List.Section>
                             <List.Section title="Filtrering">
                                 <List.Accordion
-                                title="Land"
-                                left={props => <List.Icon {...props} icon="crosshairs-gps" />}
+                                    title="Land"
+                                    left={props => <List.Icon {...props} icon="crosshairs-gps" />}
                                 >
-                                <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilterId)}
-                                </View>
+                                    <View style={styles.filterButtonGroup}>
+                                        {this.renderFilters(0, this.state.distinctCountries, this.state.selectedCountryFilterId)}
+                                    </View>
                                 </List.Accordion>
 
                                 <List.Accordion
-                                title="Årgang"
-                                left={props => <List.Icon {...props} icon="calendar-range" />}
+                                    title="Årgang"
+                                    left={props => <List.Icon {...props} icon="calendar-range" />}
                                 >
-                                <View style={styles.sliderContainer}>
-                                    <Text>{this.state.yearMinFilterInt} - {this.state.yearMaxFilterInt}</Text>
-                                    <MultiSlider
-                                        values={[this.state.yearMinFilterInt, this.state.yearMaxFilterInt]}
-                                        sliderLength={Dimensions.get('window').width/1.5}
-                                        onValuesChange={this.handleYearSliderUpdate}
-                                        min={1930}
-                                        max={2019}
-                                    />
-                                </View>
+                                    <View style={styles.sliderContainer}>
+                                        <Text>{this.state.yearMinFilterInt} - {this.state.yearMaxFilterInt}</Text>
+                                        <MultiSlider
+                                            values={[this.state.yearMinFilterInt, this.state.yearMaxFilterInt]}
+                                            sliderLength={Dimensions.get('window').width / 1.5}
+                                            onValuesChange={this.handleYearSliderUpdate}
+                                            min={1930}
+                                            max={2019}
+                                        />
+                                    </View>
                                 </List.Accordion>
 
                                 <List.Accordion
-                                title="Pris"
-                                left={props => <List.Icon {...props} icon="currency-usd" />}
+                                    title="Pris"
+                                    left={props => <List.Icon {...props} icon="currency-usd" />}
                                 >
-                                <View style={styles.sliderContainer}>
-                                    <Text>{this.state.priceMinFilter} - {this.state.priceMaxFilter}</Text>
-                                    <MultiSlider
-                                        values={[this.state.priceMinFilter, this.state.priceMaxFilter]}
-                                        sliderLength={Dimensions.get('window').width/1.5}
-                                        onValuesChange={this.handlePriceSliderUpdate}
-                                        min={0}
-                                        max={10000}
-                                        step={100}
-                                    />
-                                </View>
+                                    <View style={styles.sliderContainer}>
+                                        <Text>{this.state.priceMinFilter} - {this.state.priceMaxFilter}</Text>
+                                        <MultiSlider
+                                            values={[this.state.priceMinFilter, this.state.priceMaxFilter]}
+                                            sliderLength={Dimensions.get('window').width / 1.5}
+                                            onValuesChange={this.handlePriceSliderUpdate}
+                                            min={0}
+                                            max={10000}
+                                            step={100}
+                                        />
+                                    </View>
                                 </List.Accordion>
 
                                 <List.Accordion
-                                title="Emballasjetype"
-                                left={props => <List.Icon {...props} icon="package" />}
+                                    title="Emballasjetype"
+                                    left={props => <List.Icon {...props} icon="package" />}
                                 >
-                                <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilterId)}
-                                </View>
+                                    <View style={styles.filterButtonGroup}>
+                                        {this.renderFilters(1, this.state.distinctPackaging, this.state.selectedPackagingFilterId)}
+                                    </View>
                                 </List.Accordion>
 
                                 <List.Accordion
-                                title="Produktutvalg"
-                                left={props => <List.Icon {...props} icon="bottle-wine" />}
+                                    title="Produktutvalg"
+                                    left={props => <List.Icon {...props} icon="bottle-wine" />}
                                 >
-                                <View style={styles.filterButtonGroup}>
-                                    {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilterId)}
-                                </View>
+                                    <View style={styles.filterButtonGroup}>
+                                        {this.renderFilters(2, this.state.distinctProductSelection, this.state.selectedProductSelectionFilterId)}
+                                    </View>
                                 </List.Accordion>
-                                <Button
-                                    title='Nullstill filtrering'
-                                    type='outline'
-                                    onPress={this.resetFilters}/>
+                                <View style={styles.resetFilters}>
+                                    <Button
+                                        title='Nullstill filtrering'
+                                        type='outline'
+                                        onPress={this.resetFilters} />
+                                </View>
                             </List.Section>
                         </View>
                     </ScrollView>
+
                     <View style={styles.applyButtonContainer}>
                         <TouchableOpacity
                             onPress={() => this.setModalVisible(!this.state.modalVisible)}
@@ -264,58 +269,6 @@ class FilterGroup extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-
-    filterButtonContainer: {
-        position: "absolute",
-        padding: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-        top: '89%',
-        left: '75%',
-    },
-    filterButton: {
-        height: 50,
-        width: 50,
-        borderRadius: 100,
-        paddingTop: 7,
-        backgroundColor: '#2f95dc',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    applyButtonContainer: {
-        position: "absolute",
-        padding: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-        top: '85%',
-        left: '39%',
-    },
-    applyButton: {
-        height: 50,
-        width: 50,
-        borderRadius: 100,
-        backgroundColor: '#2f95dc',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    filterButtonGroup: {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginRight: 40,
-    },
-    buttonStyle: {
-        margin: 5,
-        borderColor: 'grey',
-    },
-    sliderContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: '10%',
-    }
-})
 
 
 export default inject("filterStore", "paginationStore", "sortStore")(observer(FilterGroup));
