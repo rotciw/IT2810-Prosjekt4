@@ -8,6 +8,7 @@ import { styles } from '../styles/homeScreen';
 
 export default function HomeScreen() {
   return (
+    // Home screen for the app, here all relevant components are rendered
     <SafeAreaView style={styles.container}>
       <Header />
       <HeaderSearchBar />

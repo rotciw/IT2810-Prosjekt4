@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
         height: 50,
         width: 50,
         borderRadius: 100,
-        backgroundColor: 'green',
+        backgroundColor: '#2f95dc',
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: 'rgba(0,0,0, .4)', // IOS
