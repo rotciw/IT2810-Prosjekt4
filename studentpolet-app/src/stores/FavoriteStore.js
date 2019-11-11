@@ -1,9 +1,11 @@
 import { AsyncStorage } from 'react-native';
 class FavoriteStore {
-    //Observables
-
+    //Observable
     favoriteIcon='md-heart-empty';
 
+
+    //Action
+    //Changes the favorite icon so it is up to date with the item the user is looking at
     setFavorite = async (itemNumber) => {
         try {
             let data = await AsyncStorage.getItem('Favorites') || [];
