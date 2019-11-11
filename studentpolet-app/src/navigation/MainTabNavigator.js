@@ -1,7 +1,6 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
@@ -11,6 +10,7 @@ const config = Platform.select({
   default: {},
 });
 
+//Creates the homescreen
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
@@ -18,6 +18,7 @@ const HomeStack = createStackNavigator(
   config
 );
 
+//Creates the option to go to the homescreen in navigation at the bottom of the app
 HomeStack.navigationOptions = {
   tabBarLabel: 'Hjem',
   tabBarIcon: ({ focused }) => (
@@ -30,6 +31,7 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+//Creates favorite screen
 const FavoriteStack = createStackNavigator(
   {
     Favorite: FavoriteScreen,
@@ -37,6 +39,7 @@ const FavoriteStack = createStackNavigator(
   config
 );
 
+//Creates the option to go to favorites in navigation at the bottom of the app
 FavoriteStack.navigationOptions = {
   tabBarLabel: 'Favoritter',
   tabBarIcon: ({ focused }) => (

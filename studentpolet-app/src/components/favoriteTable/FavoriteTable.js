@@ -14,7 +14,7 @@ class FavoriteTable extends Component{
     }
 
     keyExtractor = (item, index) => index.toString()
-    
+
     //Fetches all favorites from asyncstorage, this is called when going to the favorites page to amke sure it is up to date
     getData = async () => {
       try {
@@ -37,7 +37,6 @@ class FavoriteTable extends Component{
           onPress={() => Linking.openURL(item.Vareurl).catch((err) => console.error('An error occurred', err))}
       />
   )
-  
     render() {
         return(
             <View>
@@ -49,7 +48,7 @@ class FavoriteTable extends Component{
                 renderItem={this.renderItem}
                 onEndReachedThreshold={0.1}
                 />
-            </View>        
+            </View>
         )
     }
 }

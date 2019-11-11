@@ -7,10 +7,14 @@ import { AsyncStorage } from 'react-native';
 
 
 function ItemModal(props) {
-    //const [currentFavoriteIcon, checkFavoriteIcon] = useState('md-heart-empty');
+    //updates favorite
+    //If it allready is in favorites, this will be removed
+    //If it is not then add it
+    //This also updates the icon so it allways matches the state (favorited or not)
+    //that the item is in
     updateFavorites = async (favorite) => {
         try {
-            let data = await AsyncStorage.getItem('Favorites') || [];          
+            let data = await AsyncStorage.getItem('Favorites') || [];
             if (typeof data === 'string'){
               data = JSON.parse(data);
             }
@@ -33,8 +37,10 @@ function ItemModal(props) {
           }
           props.favoriteStore.setFavorite(props.itemNumber)
         };
+
+        //Renders the item detailed view.
+        //Get detailed inforamtion about the item and is able to add/remove to/from favorites
     return (
-        
         <Modal
             animationType="slide"
             transparent={false}
@@ -96,7 +102,7 @@ function ItemModal(props) {
                             }}>
                             Link til produktet</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { 
+                    <TouchableOpacity onPress={() => {
                         this.updateFavorites(
                             {"Varenummer":props.itemNumber,
                             "Varenavn":props.itemName,
@@ -112,7 +118,6 @@ function ItemModal(props) {
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
                             "Vareurl":props.itemLink})
-                            
 
                     }}>
                         <View style={styles.backButton}                        >
