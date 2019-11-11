@@ -1,5 +1,4 @@
 import {
-    Platform,
     StyleSheet,
     StatusBar
 } from 'react-native'
