@@ -11,8 +11,8 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
-            item: {},
+            isLoading: true,
+            item: {}
         }
     }
 
@@ -72,8 +72,12 @@ class Table extends Component {
         />
     )
 
-    renderFooter = (loading) => {
-        if (this.state.isLoading){
+    renderFooter = (length) => {
+        if (length === 0){
+            return(
+                <Text style={{textAlign: "center", top: 50}}>Ingen resultater</Text>
+            )
+        }else if (!this.state.isLoading){
             return null
         }else{
             return (
@@ -102,10 +106,10 @@ class Table extends Component {
             ),
             updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult || fetchMoreResult.productQuery.length === 0) {
-                    this.setState({isLoading: true})
+                    this.setState({isLoading: false})
                     return prev;
                 }
-                this.setState({isLoading: false})
+                this.setState({isLoading: true})
                 return {
                     // Concatenate the new feed results after the old ones
                     productQuery: prev.productQuery.concat(fetchMoreResult.productQuery),
@@ -156,7 +160,8 @@ class Table extends Component {
                             keyExtractor={this.keyExtractor}
                             data={data.productQuery}
                             renderItem={this.renderItem}
-                            ListFooterComponent={this.renderFooter(loading)}
+                            ListFooterComponent={this.renderFooter(data.productQuery.length)}
+                           //ListEmptyComponent={this.handleNoData}
                             onEndReached={() => {this.handleLoadMore(fetchMore)}}
                             onEndReachedThreshold={0.1}
                         />

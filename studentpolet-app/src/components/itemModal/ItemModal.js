@@ -120,7 +120,7 @@ function ItemModal(props) {
                             "AlkoholPrKrone":props.itemAlcoholPerNok,
                             "Emballasjetype":props.itemPackaging,
                             "Vareurl":props.itemLink}),
-                            this.props.setFavorite(props.itemNumber)
+                            props.favoriteStore.setFavorite(props.itemNumber)
                     }}>
                         <View style={styles.backButton}                        >
                             <Ionicons
@@ -141,4 +141,4 @@ function ItemModal(props) {
     )
 }
 
-export default inject('modalStore')(observer(ItemModal));
+export default inject('modalStore', 'favoriteStore')(observer(ItemModal));

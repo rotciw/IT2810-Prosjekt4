@@ -19,7 +19,7 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Hjem',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -38,7 +38,7 @@ const FavoriteStack = createStackNavigator(
 );
 
 FavoriteStack.navigationOptions = {
-  tabBarLabel: 'Favorites',
+  tabBarLabel: 'Favoritter',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-heart' : 'md-heart'} />
   ),
