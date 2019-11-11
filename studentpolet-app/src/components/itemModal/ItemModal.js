@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import { styles } from '../../styles/itemModal';
 import { Ionicons } from '@expo/vector-icons';
 import { AsyncStorage } from 'react-native';
-import { string } from 'prop-types';
-import FavoriteTable from '../favoriteTable/FavoriteTable'
 
 
 function ItemModal(props) {
@@ -38,9 +36,6 @@ function ItemModal(props) {
           }
           props.favoriteStore.setFavorite(props.itemNumber)
         };
- 
-    
-
     return (
         
         <Modal
