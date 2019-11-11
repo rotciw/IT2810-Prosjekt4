@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
     Modal,
     Dimensions,
-    StatusBar,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
@@ -19,7 +18,7 @@ let filterData = require("./FilterData");
 class FilterGroup extends Component {
     constructor(props) {
         super(props);
-        // These states are for displaying data seperately from the store
+        // These states are for displaying data seperately from the store, for locally storing
         this.state = {
             distinctCountries: filterData.distinctCountries,
             distinctPackaging: filterData.distinctPackaging,
@@ -43,13 +42,17 @@ class FilterGroup extends Component {
     }
 
     selectButton(filterGroup, name, i) {
+        // For countries
         if (filterGroup === 0) {
             this.setState({ selectedCountryFilterId: i, selectedCountryFilter: name });
         } else if (filterGroup === 1) {
+            // For packaging, e.g. glass, plastic
             this.setState({ selectedPackagingFilterId: i, selectedPackagingFilter: name });
         } else if (filterGroup === 2) {
+            // Product selectiong, e.g. test selection, basic selection
             this.setState({ selectedProductSelectionFilterId: i, selectedProductSelectionFilter: name });
         } else if (filterGroup === 3) {
+            // Sorting function
             this.setState({ selectedSortingId: i })
         }
         // Reset Pagination when selecting a filter
@@ -76,6 +79,7 @@ class FilterGroup extends Component {
     };
 
     handleYearSliderUpdate = values => {
+        // Slider for years
         this.setState({
             yearMinFilterInt: values[0],
             yearMaxFilterInt: values[1],
@@ -84,6 +88,7 @@ class FilterGroup extends Component {
         });
     }
     handlePriceSliderUpdate = values => {
+        // Slider for price
         this.setState({
             priceMinFilter: values[0],
             priceMaxFilter: values[1],
@@ -91,6 +96,7 @@ class FilterGroup extends Component {
     }
 
     resetFilters = () => {
+        // Reset all filters including sorting
         this.setState({
             selectedCountryFilterId: "",
             selectedPackagingFilterId: "",
@@ -124,6 +130,7 @@ class FilterGroup extends Component {
     }
 
     setModalVisible = (visible) => {
+        // Set a visible modal, which is diplaying all filtering and sorting options
         if (!visible) {
             this.props.filterStore.addYearMinFilter(this.state.yearMinFilterString);
             this.props.filterStore.addYearMaxFilter(this.state.yearMaxFilterString);
@@ -157,6 +164,7 @@ class FilterGroup extends Component {
                     transparent={false}
                     visible={this.state.modalVisible}
                     onRequestClose={() => this.setModalVisible(!this.state.modalVisible)}
+                    // With onRequestClose, the user can press back button (android only)
                 >
                     <ScrollView>
                         <View>
@@ -239,7 +247,7 @@ class FilterGroup extends Component {
                             </List.Section>
                         </View>
                     </ScrollView>
-
+                    {/*  Apply button inside filter modal */}
                     <View style={styles.applyButtonContainer}>
                         <TouchableOpacity
                             onPress={() => this.setModalVisible(!this.state.modalVisible)}
@@ -254,6 +262,7 @@ class FilterGroup extends Component {
                         </TouchableOpacity>
                     </View>
                 </Modal>
+                {/* Filterbutton */}
                 <TouchableOpacity
                     onPress={() => this.setModalVisible(true)}
                     style={styles.filterButton}

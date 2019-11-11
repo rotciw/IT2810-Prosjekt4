@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { styles } from '../../styles/header.js';
 
-export default function Header(props) {
+export default function Header() {
   return (
     <View style={styles.container}>
       <Image style={{ width: 30, height: 30 }} source={require('../../assets/images/wine_glass.png')} />
