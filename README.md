@@ -1,8 +1,60 @@
 # IT2810 - prosjekt 4
 
+Noen avsnitt i dokumentasjonen er hentet fra prosjekt 3 (bl.a. state management), da det er likheter med dette prosjektet. Vi har valgt å gjenbruke deler av dokumentasjonen for å gi et helhetlig bilde av vårt prosjekt. 
+
+
+### Starte applikasjon
+
+For å kjøre applikasjonen må man ha Expo appen, som finnes for Android og iOS. Pass på at du er på NTNU nettet for at databasen skal fungere.
+
+#### Kjøre lokalt
+Git clone prosjektet til ønsket sted: feks.
+```
+git clone https://gitlab.stud.idi.ntnu.no/IT2810-H19/teams/team-38/project_4.git
+cd studentpolet-app
+```
+Kjør så kommandoen
+```
+npm install
+```
+Start appen
+```
+npm start
+```
+eller
+```
+expo start
+```
+Følg instruksene til Expo for hvordan du får den opp på mobilen
+
+#### Kjøre eksternt
+Gå inn på linken: https://expo.io/@rotciw/studentpolet-app
+
+Scan QR koden i Expo appen.
+
 ### Applikasjonens innhold og funksjonalitet
 
+I dette prosjektet har vi utviklet en søkbar katalog med produkter fra vinmonopolet for iOS og Android. Applikasjonen baserer seg på backend og server fra forrige prosjekt. Brukergrensesnittet er delt inn i to tabs; Hjem og Favoritter. 
 
+#### Detaljert visning
+
+I den detaljerte visningen får man opp et bildet av produktet, all informasjonen vi lagrer om produktet, en link til vinmonopolets nettsider for rask bestilling samt en knapp for å legge til produktet som favoritt. 
+
+#### Filtrering, søk, sortering og paginering
+
+Filtrering, søk, sortering og paginering håndteres i backend.
+
+På hjem-siden kan brukeren søke blant produktene i databasen ved å benytte søkefeltet øverst på siden. Søkefeltet er dynamisk slik at det søker for hvert tegn som endrer seg. Det er mulig å søke på produktnavn, produkttype og land.
+
+Brukere kan legge til filtrering på søkeresultatet ved å trykke på søke-ikonet nede til høyre på siden. Her kan man filtrere på land, årgang, pris, emballasjetype og produktutvalg. Årgang og pris kan filtreres ved å sette en minimums- og maksimumsverdi. Filtrering for land emballasjetype og produktutvalg kan settes ved å trykke på ønsket filter. Brukeren kan trykke på “nullstill filtrering” for å nullstille alle filtre. På samme side kan brukeren spesifisere hva søkeresultatene skal sorteres etter. Når brukeren trykker på hake-ikonet oppdateres spørringen, og det tilhørende resultatsettet vises i listen.
+
+Vi valgte å implementert dynamisk paginering da dette er den vanligste løsningen på mobile enheter. Hvis brukeren scroller til bunnen av siden lastes automatisk de neste 20 elementene inn. På denne måten har vi oppnådd en god ytelse i applikasjonen, samtidig som at funksjonaliteten er brukervennlig. Hvis brukeren endrer søkeord eller filtrering blir pagineringen nullstilt automatisk.
+
+#### Favoritter
+
+Brukere kan legge til produkter som favoritter når de er inne på detaljert visning siden til hvert produkt. Angrer brukeren kan man trykke på samme knapp igjen for å fjerne det fra favoritter. Hjertet på favoritt knappen blir fylt når man har gjort et produkt til favoritt. 
+
+For å se favoritter kan man gå inn på favoritt siden hvor alle favoritter man har så langt vil ligge i en liste tilsvarende søk listen. Her kan man gå gå til detaljert visning eller fjerne produkter direkte ved å “Swipe” produktet mot venstre og trykke på fjern knappen. 
 
 ### Teknologi
 
@@ -15,7 +67,6 @@ Både komponentstrukturen og flere av funksjonene i prosjektet er relativt lik. 
 Vi har forsøkt å gjøre koden så mudulær som mulig slik at kompoentene våre enkelt kan gjenbrukes. Samtidig fører dette til en oversiktlig kodebase som enkelt kan vidreutvikles av andre. Koden er skrevet i ES6, med ESLint som linter.
 
 <img src="https://imgur.com/mTxXdf7.png" width="600px" alt="MobX Store"/>
-
 
 ##### Expo
 
@@ -31,20 +82,13 @@ ApolloClient tar imot GraphQL spørringene og sender de til serveren, og fetcher
 ##### AsyncStorage
 
 For å lagring mellom hver gang man kjører appen har vi brukt AsyncStorage. 
-Vi har valgt å lagre favoritter slik at man slipper å huske på å søke opp produkter man liker flere ganger. 
-På favorittsiden kan man se alle favoritter man har lagret og få direkte link til vinmonopol siden til produktet. 
-Vi valgte å gjøre dette fremfor å ha en visning som i søkekatalogen fordi brukeren allerede har lagret produktet og derfor har sett inforamsjon tidligere.
-Dette gjør at brukeren har en kortere vei til å se om produktet finnes i en butikk eller bestille hjem,
-men medfører dessverre at brukeren må søke opp produktet for å fjerne det fra favoritter. 
+Vi har valgt å lagre favoritter slik at man slipper å huske på å søke opp produkter man liker flere ganger. I AsyncStorage lagrer vi all dataen om et produkt slik at man kan få opp all informasjon når man ser den detaljerte visningen til hvert produkt.
 
-Favoritter lagres via den detaljerte visningen og man ser forskjell på knappen om man har lagret det eller ikke og kan ved å trykke på knappen igjen endre tilstand.
+Favoritter lagres og fjernes via den detaljerte visningen og kan i tillegg fjernes ved å bruke fjern knappen etter å ha dratt et produkt i siden i favoritt visningen. 
 
 ##### MobX og state management
 
-
-Gruppen valgte å bruke MobX for state management for prosjektet. MobX ble hovedsakelig valgt på grunn av størrelsen til prosjektet, da Redux ofte er valget for store prosjekter. Siden gruppen ikke hadde noen erfaring med noen av disse rammeverkene, var MobX også anbefalt som et startpunkt.
-
-Det er tre instanser til unntak for bruk av MobX for state management. I `FilterGroup`, `ModalContainer`, og `SearchBar` komponentene, blir React sitt innebygde state management brukt. Disse brukes for å holde intern state på komponenten i form av feks.å vise live oppdatering på hva som skrives inn i søkefeltet.
+Gruppen valgte å bruke MobX for state management for prosjektet da det var dette rammeverket vi benyttet i forrige prosjekt.
 
 ###### Eksempel på bruk av MobX:
 
@@ -59,6 +103,8 @@ const rootStore = new RootStore();
     sortStore={rootStore.sortStore}
     searchBarStore={rootStore.searchBarStore}
     paginationStore={rootStore.paginationStore}
+    modalStore={rootStore.modalStore}
+    favoriteStore={rootStore.favoriteStore}
 >
     ...
 
@@ -75,13 +121,13 @@ decorate(SearchBarStore, {
     addSearchBarValue: action,
 });
 ```
-Under er et eksempel på sammenhengen av MobX og Pagination komponenten.
+Under er et eksempel på sammenhengen av MobX og `FilterGroup` komponenten.
 
-Ved å kjøre en “action” på Pagination, kjøres f eks en funksjon i paginationStore som kan oppdatere en variabel (state) i samme store. Denne kan da Table som også er en “observer”, ta imot og vise.
+Ved å kjøre en “action” på `FilterGroup`, kjøres f.eks. en funksjon i `FilterStore` som kan oppdatere en variabel (state) i samme store. Denne kan da Table som også er en “observer”, ta imot og vise.
 
 <img src="https://imgur.com/0D9qGCe.png" width="600px" alt="MobX Store"/>
 
-Eksempel med kun Pagination. Andre stores og komponenter vises ikke i figuren.
+Eksempel med kun FilterStore. Andre stores og komponenter vises ikke i figuren.
 
 #### Git, koding
 
@@ -101,7 +147,6 @@ Siden det ikke var krav til automatisk testing av koden har vi valgt å gjøre e
 - iPhone 6S Plus (750 x 1334)
 
 
+#### Variabelnavn
 
-
-
-
+Variabelnavnene i frontend bruker camelCase, og engelsk. I backend henger variabelnavnene fra prosjekt 3, der det brukes uppercase for variabelnavn og på norsk, ettersom data fra vinmonopolet sine data var på norsk. Der backend variabler refereres i frontend er det dermed ulikt.
