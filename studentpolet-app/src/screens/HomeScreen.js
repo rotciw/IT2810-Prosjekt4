@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import Table from '../components/table/Table'
 import Header from '../components/header/Header';
 import HeaderSearchBar from '../components/headerSearchBar/HeaderSearchBar';
@@ -12,7 +12,9 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <Header />
       <HeaderSearchBar />
-      <Table />
+      <View style={{backgroundColor: 'white'}}>
+        <Table />
+      </View>
       <FilterGroup />
     </SafeAreaView>
   );

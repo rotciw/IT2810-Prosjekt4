@@ -49,7 +49,7 @@ export default function App(props) {
           favoriteStore={rootStore.favoriteStore}
         >
           <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+            {Platform.OS === 'ios' && <StatusBar translucent backgroundColor="blue" barStyle="light-content" />}
             <AppNavigator />
           </View>
         </Provider>

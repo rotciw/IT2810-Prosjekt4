@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
-import {AsyncStorage} from 'react-native';
-import {NavigationEvents} from 'react-navigation';
+import { View, FlatList, Dimensions, AsyncStorage } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import Swipeout from 'react-native-swipeout';
 import TableItem from '../tableItem/TableItem';
-
-
 
 //List of favorites
 class FavoriteTable extends Component{
@@ -71,7 +68,7 @@ class FavoriteTable extends Component{
             <View>
               <NavigationEvents onWillFocus={() => this.getData()} />
               <FlatList
-                contentContainerStyle={{ paddingBottom: 35}}
+                contentContainerStyle={{ paddingBottom: Dimensions.get('window').height / 3.3 }}
                 keyExtractor={this.keyExtractor}
                 data={this.state.data}
                 renderItem={this.renderItem}

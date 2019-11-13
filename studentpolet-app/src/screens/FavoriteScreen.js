@@ -1,25 +1,36 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import { SafeAreaView, View, StyleSheet, Text, StatusBar } from 'react-native';
 import FavoriteTable from '../components/favoriteTable/FavoriteTable'
+import Header from '../components/header/Header'
+import HeaderSearchBar from '../components/headerSearchBar/HeaderSearchBar'
 
 
 export default function FavoriteScreen() {
   return (
-    <ScrollView style={styles.container}>
-      <FavoriteTable />
-    </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.headerText}> FAVORITTER </Text>
+      <View style={{backgroundColor: 'white'}}>
+        <FavoriteTable />
+      </View>
+    </SafeAreaView>
   );
 }
 
 FavoriteScreen.navigationOptions = {
-  title: 'Favorite',
+  header: null,
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#2D2D2D',
+    marginTop: StatusBar.currentHeight,
   },
+  headerText: {
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: 'white',
+    fontSize: 25,
+    lineHeight: 60,
+    fontWeight: 'bold',
+  }
 });
