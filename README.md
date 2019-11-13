@@ -147,6 +147,18 @@ Siden det ikke var krav til automatisk testing av koden har vi valgt å gjøre e
 - Samsung Galaxy 10e (1080 x 2280)
 - iPhone 6S Plus (750 x 1334)
 
+Testingen foregikk ved at vi testet grundig underveis som vi har laget funksjoner og etter hele prosjektet har vært feridg.
+Testingen etter ferdig funksjonallitet har gått ut på å teste all funksjonalitet altså:
+- Søk
+- Filtrering
+- Sortering
+- Paginering
+- Detaljert visning
+- Lasting av mye data
+- Legge til favoritter
+- Fjerning av favoritter fra detaljert visning
+- Fjerning av favoritter fra favoritt siden
+- Legge til større mengder favoritter
 
 #### Variabelnavn
 
