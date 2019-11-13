@@ -32,12 +32,13 @@ Denne inneholder bl.a. navigering ved hjelp av faner nederst på skjermen, samt.
 
 For å lagring mellom hver gang man kjører appen har vi brukt AsyncStorage. 
 Vi har valgt å lagre favoritter slik at man slipper å huske på å søke opp produkter man liker flere ganger. 
-På favorittsiden kan man se alle favoritter man har lagret og få direkte link til vinmonopol siden til produktet. 
-Vi valgte å gjøre dette fremfor å ha en visning som i søkekatalogen fordi brukeren allerede har lagret produktet og derfor har sett inforamsjon tidligere.
-Dette gjør at brukeren har en kortere vei til å se om produktet finnes i en butikk eller bestille hjem,
-men medfører dessverre at brukeren må søke opp produktet for å fjerne det fra favoritter. 
+På favorittsiden kan man se alle favoritter man har lagret og få mer informasjon om produktet ved å trykke på det slik som i søkelisten. 
+Ønsker man å fjerne et produkt fra listen har vi lagt til en knapp for å fjerne favoritter som kommer frem om man drar produktet til siden. 
+Dette er en funksjon for den mer avanserte brukeren og om man ikke er så datakjent kan man fjerne den ved å gå inn på produktet og trykke på liker hjerteknappen igjen for å fjerne produktet.
 
-Favoritter lagres via den detaljerte visningen og man ser forskjell på knappen om man har lagret det eller ikke og kan ved å trykke på knappen igjen endre tilstand.
+I AsyncStorage lagrer vi all dataen om et produkt slik at man kan få opp all informasjon når man ser den detaljerte visningen til hvert produkt.
+
+Favoritter lagres via den detaljerte visningen og man ser forskjell på knappen om man har lagret det eller ikke og kan ved å trykke på knappen igjen endre om prudktet skal være en favoritt.
 
 ## Git, koding
 
