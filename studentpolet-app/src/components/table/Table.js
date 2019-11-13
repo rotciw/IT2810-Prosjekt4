@@ -6,7 +6,7 @@ import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 import { styles } from '../../styles/table';
 import ItemModal from '../itemModal/ItemModal';
-import TableItem from './tableItem/TableItem';
+import TableItem from '../tableItem/TableItem';
 
 class Table extends Component {
     constructor(props) {

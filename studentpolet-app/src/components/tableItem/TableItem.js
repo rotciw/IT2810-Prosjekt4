@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { inject } from 'mobx-react';
-import { styles } from '../../../styles/tableItem';
+import { styles } from '../../styles/tableItem';
 import { Ionicons } from '@expo/vector-icons';
 
 class TableItem extends PureComponent {
