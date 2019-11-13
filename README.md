@@ -64,8 +64,9 @@ Prosjektet baserer seg på React Native, som har mange likhetstrekk med React.
 Av den grunn har vi valgt å gjenbruke noe av oppsettet og logikken fra prosjekt 3. 
 Både komponentstrukturen og flere av funksjonene i prosjektet er relativt lik. Vi har koblet appen opp mot serveren og databasen vi satt opp i prosjekt 3 på tilsvarende måte med Apollo. React Native støtter ikke HTML- eller CSS-syntax. Derfor har vi  benyttet React Native komponenter (feks. View fremfor div), og style sheets. Brukergrensesnittet er endret slik at det er i samsvar med vanlige konvensjoner for mobile applikasjoner. Vi har i hovedsak benyttet tredjepartskomponenter fra `react-native` og `react-native-elements` for Text, View, ScrollView, FlatList, Modal osv. Videre har vi benyttet en range slider fra `@ptomasroos/react-native-multi-slider` for filtrering på årgang og pris. 
 
-Vi har forsøkt å gjøre koden så mudulær som mulig slik at kompoentene våre enkelt kan gjenbrukes. Samtidig fører dette til en oversiktlig kodebase som enkelt kan vidreutvikles av andre. Koden er skrevet i ES6, med ESLint som linter.
+Vi har forsøkt å gjøre koden så modulær som mulig slik at kompoentene våre enkelt kan gjenbrukes. Samtidig fører dette til en oversiktlig kodebase som enkelt kan vidreutvikles av andre. Koden er skrevet i ES6, med ESLint som linter.
 
+For vår FlatList komponent har vi valgt å lage egen komponent for hvert objekt i listen. Gruppen prøvde først med React Elements sin ListItem komponent, men så dårlige resultater på hastighet. Dermed ble det laget en egen komponent for dette med React sin PureComponent, slik at props og state blir shallow sammenliknet, noe vanlig Component ikke gjør.
 <img src="https://imgur.com/mTxXdf7.png" width="600px" alt="MobX Store"/>
 
 ##### Expo
