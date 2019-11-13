@@ -27,7 +27,7 @@ expo start
 ```
 Følg instruksene til Expo for hvordan du får den opp på mobilen
 
-#### Kjøre eksternt
+#### Kjøre eksternt (KUN ANDROID)
 Gå inn på linken: https://expo.io/@rotciw/studentpolet-app
 
 Scan QR koden i Expo appen.
