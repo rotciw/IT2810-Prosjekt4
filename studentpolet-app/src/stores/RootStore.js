@@ -52,7 +52,9 @@ decorate(ModalStore, {
 
 decorate(FavoriteStore, {
     favoriteIcon: observable,
-    setFavorite: action
+    setFavorite: action,
+    data: observable,
+    getData: action
 })
 
 class RootStore {
