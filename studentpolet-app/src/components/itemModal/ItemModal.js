@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Modal, Text, Image, View, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
+import { Modal, Text, Image, View, TouchableOpacity, Linking, ScrollView } from 'react-native';
 import { styles } from '../../styles/itemModal';
 import { Ionicons } from '@expo/vector-icons';
 import { AsyncStorage } from 'react-native';
@@ -35,7 +35,7 @@ function ItemModal(props) {
           } catch (error) {
             // Error saving data
           }
-          props.favoriteStore.setFavorite(props.itemNumber)
+          props.favoriteStore.setFavorite(props.modalStore.modalItem.Varenummer)
         };
 
         //Renders the item detailed view.
@@ -47,77 +47,79 @@ function ItemModal(props) {
             visible={props.modalStore.modalVisible}
             onRequestClose={() => props.modalStore.setModalInvisible()}
         >
-            <SafeAreaView style={styles.container}>
+            {/* Scrollview to ensure same behavior for shorter devices */}
+            {/* All props that are passed are from the modalstore which is set in the TableItem component */}
+            <ScrollView>
                 <View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.title}>{props.itemName}</Text>
+                        <Text style={styles.title}>{props.modalStore.modalItem.Varenavn}</Text>
                     </View>
                     <Image
                         style={{ width: '100%', height: 200 }}
                         resizeMode="center"
-                        source={{ uri: "https://bilder.vinmonopolet.no/cache/500x500-0/" + props.itemNumber + "-1.jpg" }} />
+                        source={{ uri: "https://bilder.vinmonopolet.no/cache/500x500-0/" + props.modalStore.modalItem.Varenummer + "-1.jpg" }} />
                     <View style={styles.divider}>
                         <Text>
-                            Varenummer:<Text style={{ fontWeight: "bold" }}> {props.itemNumber}</Text>
+                            Varenummer:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Varenummer}</Text>
                         </Text>
                         <Text>
-                            Varetype:<Text style={{ fontWeight: "bold" }}> {props.itemType}</Text>
+                            Varetype:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Varetype}</Text>
                         </Text>
                         <Text>
-                            Land:<Text style={{ fontWeight: "bold" }}> {props.itemCountry}</Text>
+                            Land:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Land}</Text>
                         </Text>
                     </View>
                     <View style={styles.divider}>
                         <Text>
-                            Volum:<Text style={{ fontWeight: "bold" }}> {props.itemVolume}l</Text>
+                            Volum:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Volum}l</Text>
                         </Text>
                         <Text>
-                            Alkoholprosent:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPercentage}%</Text>
+                            Alkoholprosent:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Alkohol}%</Text>
                         </Text>
                         <Text>
-                            Årgang:<Text style={{ fontWeight: "bold" }}> {props.itemYear}</Text>
+                            Årgang:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Argang}</Text>
                         </Text>
-                        <Text>Smak: {props.itemTaste}</Text>
+                        <Text>Smak: {props.modalStore.modalItem.Smak}</Text>
                     </View>
                     <View style={styles.divider}>
                         <Text>
-                            Alkohol Pr. Krone:<Text style={{ fontWeight: "bold" }}> {props.itemAlcoholPerNok} kr</Text>
+                            Alkohol Pr. Krone:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.AlkoholPrKrone} kr</Text>
                         </Text>
                         <Text>
-                            Literpris:<Text style={{ fontWeight: "bold" }}> {props.itemLitrePrice} kr</Text>
+                            Literpris:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Literpris} kr</Text>
                         </Text>
                         <Text>
-                            Pris:<Text style={{ fontWeight: "bold" }}> {props.itemPrice} kr</Text>
+                            Pris:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Pris} kr</Text>
                         </Text>
                         <Text>
-                            Emballasjetype:<Text style={{ fontWeight: "bold" }}> {props.itemPackaging}</Text>
+                            Emballasjetype:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Emballasjetype}</Text>
                         </Text>
                         <Text>
-                            Produktutvalg:<Text style={{ fontWeight: "bold" }}> {props.itemSelection}</Text>
+                            Produktutvalg:<Text style={{ fontWeight: "bold" }}> {props.modalStore.modalItem.Produktutvalg}</Text>
                         </Text>
                         <Text
                             style={{ color: 'blue', fontWeight: "bold" }}
                             onPress={() => {
-                                Linking.openURL(props.itemLink).catch((err) => console.error('An error occurred', err));
+                                Linking.openURL(props.modalStore.modalItem.Vareurl).catch((err) => console.error('An error occurred', err));
                             }}>
                             Link til produktet</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
                         this.updateFavorites(
-                            {"Varenummer":props.itemNumber,
-                            "Varenavn":props.itemName,
-                            "Volum":props.itemVolume,
-                            "Pris":props.itemPrice,
-                            "Literpris":props.itemLitrePrice,
-                            "Varetype":props.itemType,
-                            "Produktutvalg":props.itemSelection,
-                            "Smak":props.itemTaste,
-                            "Land":props.itemCountry,
-                            "Argang":props.itemYear,
-                            "Alkohol":props.itemAlcoholPercentage,
-                            "AlkoholPrKrone":props.itemAlcoholPerNok,
-                            "Emballasjetype":props.itemPackaging,
-                            "Vareurl":props.itemLink})
+                            {"Varenummer":props.modalStore.modalItem.Varenummer,
+                            "Varenavn":props.modalStore.modalItem.Varenummer,
+                            "Volum":props.modalStore.modalItem.Volum,
+                            "Pris":props.modalStore.modalItem.Pris,
+                            "Literpris":props.modalStore.modalItem.Literpris,
+                            "Varetype":props.modalStore.modalItem.Varetype,
+                            "Produktutvalg":props.modalStore.modalItem.Produktutvalg,
+                            "Smak":props.modalStore.modalItem.Smak,
+                            "Land":props.modalStore.modalItem.Land,
+                            "Argang":props.modalStore.modalItem.Argang,
+                            "Alkohol":props.modalStore.modalItem.Alkohol,
+                            "AlkoholPrKrone":props.modalStore.modalItem.AlkoholPrKrone,
+                            "Emballasjetype":props.modalStore.modalItem.Emballasjetype,
+                            "Vareurl":props.modalStore.modalItem.Vareurl})
 
                     }}>
                         <View style={styles.backButton}                        >
@@ -134,7 +136,7 @@ function ItemModal(props) {
                         </View>
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
+            </ScrollView>
         </Modal >
     )
 }

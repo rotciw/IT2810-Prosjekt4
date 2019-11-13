@@ -1,6 +1,7 @@
 class ModalStore {
     //Observables
     modalVisible = false;
+    modalItem = {}
 
     setModalVisible() {
         this.modalVisible = true;
@@ -8,6 +9,10 @@ class ModalStore {
 
     setModalInvisible() {
         this.modalVisible = false;
+    }
+
+    setModalItem(item) {
+        this.modalItem = item;
     }
 }
 
