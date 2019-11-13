@@ -10,7 +10,7 @@ class TableItem extends PureComponent {
         // Sets the item for modalStore so it can be used in other components such as ItemModal
         this.props.modalStore.setModalVisible()
         this.props.modalStore.setModalItem(item)
-        this.props.favoriteStore.setFavorite(item.Varenummer)
+        this.props.favoriteStore.setFavorite(item)
     };
 
     render() {

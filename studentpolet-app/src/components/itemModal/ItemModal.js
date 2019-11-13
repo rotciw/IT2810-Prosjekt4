@@ -35,7 +35,7 @@ function ItemModal(props) {
           } catch (error) {
             // Error saving data
           }
-          props.favoriteStore.setFavorite(props.modalStore.modalItem.Varenummer)
+          props.favoriteStore.setFavorite(props.modalStore.modalItem)
         };
 
         //Renders the item detailed view.
@@ -107,7 +107,7 @@ function ItemModal(props) {
                     <TouchableOpacity onPress={() => {
                         this.updateFavorites(
                             {"Varenummer":props.modalStore.modalItem.Varenummer,
-                            "Varenavn":props.modalStore.modalItem.Varenummer,
+                            "Varenavn":props.modalStore.modalItem.Varenavn,
                             "Volum":props.modalStore.modalItem.Volum,
                             "Pris":props.modalStore.modalItem.Pris,
                             "Literpris":props.modalStore.modalItem.Literpris,

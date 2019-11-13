@@ -13,16 +13,7 @@ class FavoriteTable extends Component{
         super(props);
         this.state = {
           data: null,
-          currItem: null
         }
-        this.swipeoutBtns = [
-          {
-            text: 'Delete',
-            backgroundColor: '#D11A2A',
-            color: "white",
-            onPress: () => this.removeFavorite(this.state.currItem)
-          }
-        ]
     }
 
     keyExtractor = (item, index) => index.toString()
@@ -57,11 +48,20 @@ class FavoriteTable extends Component{
         this.getData();
       };
 
-    //The view of every item, same as in Table
+    //The view of every item, same as in Table, SwipeOut handles the swipe and delete button
     renderItem = ({ item }) => (
       <Swipeout
-      right={this.swipeoutBtns}
-      onOpen={() => this.setState({currItem:item})}>
+      right={[{
+        text: 'Delete',
+        backgroundColor: '#D11A2A',
+        color: "white",
+        onPress: () => this.removeFavorite(item),
+        type: 'delete'
+      }]}
+      onOpen={() => this.setState({currItem:item})}
+      autoClose={true}
+
+      >
         <TableItem item={item}/>
       </Swipeout>
 

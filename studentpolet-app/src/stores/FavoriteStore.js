@@ -6,14 +6,14 @@ class FavoriteStore {
 
     //Action
     //Changes the favorite icon so it is up to date with the item the user is looking at
-    setFavorite = async (itemNumber) => {
+    setFavorite = async (item) => {
         try {
             let data = await AsyncStorage.getItem('Favorites') || [];
             data = JSON.parse(data);
   
             let found = false;
             for(let i = data.length - 1; i >= 0; i--) {
-                if(data[i].Varenummer === itemNumber) {
+                if(data[i].Varenummer === item.Varenummer) {
                 this.favoriteIcon='md-heart';
                 found = true
                 }
