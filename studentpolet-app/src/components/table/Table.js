@@ -1,6 +1,5 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Dimensions } from 'react-native';
-import { ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
