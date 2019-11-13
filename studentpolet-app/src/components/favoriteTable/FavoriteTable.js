@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import {AsyncStorage, Linking, StyleSheet} from 'react-native';
+import {AsyncStorage, Linking} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import Swipeout from 'react-native-swipeout';
 
@@ -89,17 +89,5 @@ class FavoriteTable extends Component{
     }
 }
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    backgroundColor: 'whitesmoke',
-    padding: 20,
-  }
-});
 
 export default FavoriteTable;
