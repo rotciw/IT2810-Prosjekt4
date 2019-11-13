@@ -1,5 +1,5 @@
 import {
-    StyleSheet, Dimensions,
+    StyleSheet, Dimensions, Platform
 } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
     },
     textContainer: {
         backgroundColor: '#2D2D2D',
-        padding: 15,
+        paddingTop: Platform.OS === 'ios' ? 37 : 15,
+        paddingBottom: 15,
         width: '100%',
         alignSelf: 'stretch',
         width: Dimensions.get('window').width
@@ -32,6 +33,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: 15
     },
     divider: {
+        lineHeight: 70,
         paddingBottom: 15,
         paddingHorizontal: 15,
         textAlign: 'center',

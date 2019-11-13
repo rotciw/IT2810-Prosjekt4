@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Text, Image, View, TouchableOpacity, Linking, ScrollView } from 'react-native';
 import { styles } from '../../styles/itemModal';
@@ -15,37 +15,43 @@ function ItemModal(props) {
     updateFavorites = async (favorite) => {
         try {
             let data = await AsyncStorage.getItem('Favorites') || [];
-            if (typeof data === 'string'){
-              data = JSON.parse(data);
+            if (typeof data === 'string') {
+                data = JSON.parse(data);
             }
             let isRemoved = false;
-            for(let i = data.length - 1; i >= 0; i--) {
-                if(data[i].Varenummer == favorite.Varenummer) {
+            for (let i = data.length - 1; i >= 0; i--) {
+                if (data[i].Varenummer == favorite.Varenummer) {
                     //Fjerner data om det allerede finnes
-                   data.splice(i, 1);
-                   isRemoved = true;
+                    data.splice(i, 1);
+                    isRemoved = true;
                 }
             }
-            if (!isRemoved){
+            if (!isRemoved) {
                 //Legger til data om det ikke finnes fra før
                 data.push(favorite);
             }
             await AsyncStorage.removeItem('Favorites');
             await AsyncStorage.setItem('Favorites', JSON.stringify(data));
-          } catch (error) {
+        } catch (error) {
             // Error saving data
-          }
-          props.favoriteStore.setFavorite(props.modalStore.modalItem)
-        };
+        }
+        props.favoriteStore.setFavorite(props.modalStore.modalItem.Varenummer)
+    };
 
-        //Renders the item detailed view.
-        //Get detailed inforamtion about the item and is able to add/remove to/from favorites
+    const handleBackButton = useCallback(() => {
+        // When backpress, close modal and update favorite page
+        props.favoriteStore.getData();
+        props.modalStore.setModalInvisible();
+    })
+
+    //Renders the item detailed view.
+    //Get detailed inforamtion about the item and is able to add/remove to/from favorites
     return (
         <Modal
             animationType="slide"
             transparent={false}
             visible={props.modalStore.modalVisible}
-            onRequestClose={() => props.modalStore.setModalInvisible()}
+            onRequestClose={() => handleBackButton()}
         >
             {/* Scrollview to ensure same behavior for shorter devices */}
             {/* All props that are passed are from the modalstore which is set in the TableItem component */}
@@ -130,7 +136,7 @@ function ItemModal(props) {
                             />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { props.modalStore.setModalInvisible() }}>
+                    <TouchableOpacity onPress={() => { handleBackButton() }}>
                         <View style={styles.backButton}                        >
                             <Text style={{ color: 'white' }}>Tilbake</Text>
                         </View>

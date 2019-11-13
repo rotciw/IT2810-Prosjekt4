@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         padding: 22,
         justifyContent: 'center',
         alignItems: 'center',
-        top: Dimensions.get('window').height / 1.2,
+        top: Dimensions.get('window').height / 1.23,
         left: Dimensions.get('window').width / 1.35,
     },
     filterButton: {
