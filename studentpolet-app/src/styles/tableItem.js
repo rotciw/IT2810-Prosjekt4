@@ -28,7 +28,8 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     subtitle: {
-        marginLeft: 20
+        marginLeft: 20,
+        opacity: 0.6
     },
     chevron: {
         flex:1,
