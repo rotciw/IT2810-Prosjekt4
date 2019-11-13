@@ -128,10 +128,10 @@ function ItemModal(props) {
                             "Vareurl":props.modalStore.modalItem.Vareurl})
 
                     }}>
-                        <View style={styles.backButton}                        >
+                        <View style={styles.favButton}>
                             <Ionicons
                                 name={props.favoriteStore.favoriteIcon}
-                                color="white"
+                                color="#cf5c36"
                                 size={16}
                             />
                         </View>

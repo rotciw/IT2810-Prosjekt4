@@ -32,6 +32,16 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
         marginHorizontal: 15
     },
+    favButton: {
+        borderColor: '#cf5c36',
+        borderWidth: 1,
+        padding: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        marginBottom: 10,
+        marginHorizontal: 15
+    },
     divider: {
         lineHeight: 70,
         paddingBottom: 15,
