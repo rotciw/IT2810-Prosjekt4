@@ -45,7 +45,9 @@ decorate(PaginationStore, {
 decorate(ModalStore, {
     modalVisible: observable,
     setModalVisible: action,
-    setModalInvisible: action
+    setModalInvisible: action,
+    modalItem: observable,
+    setModalItem: action
 })
 
 decorate(FavoriteStore, {

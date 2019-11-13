@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
@@ -6,6 +6,7 @@ import { Query } from 'react-apollo';
 import { observer, inject } from 'mobx-react';
 import { styles } from '../../styles/table';
 import ItemModal from '../itemModal/ItemModal';
+import TableItem from './tableItem/TableItem';
 
 class Table extends Component {
     constructor(props) {
@@ -54,30 +55,12 @@ class Table extends Component {
         return GET_PRODUCTQUERY;
     };
 
-
-    onPress(item) {
-        // Show a modal, and check favorite state
-        this.props.modalStore.setModalVisible()
-        this.setState({ item: item })
-        this.props.favoriteStore.setFavorite(item.Varenummer)
-    };
-
     // Key for flatlist
     keyExtractor = (item, index) => index.toString()
 
     // For each item in the list, render a ListItem
     renderItem = ({ item }) => (
-        <ListItem
-            title={item.Varenavn}
-            leftAvatar={{
-                height: 64, width: 32, resizeMode: 'contain',
-                source: { uri: "https://bilder.vinmonopolet.no/cache/100x100-0/" + item.Varenummer + "-1.jpg" }
-            }}
-            subtitle={"Alkohol Pr. Krone: " + item.AlkoholPrKrone}
-            chevron
-            bottomDivider
-            onPress={() => this.onPress(item)}
-        />
+        <TableItem item={item}/>
     )
 
     renderFooter = (length) => {
@@ -173,25 +156,12 @@ class Table extends Component {
                                 renderItem={this.renderItem}
                                 ListFooterComponent={this.renderFooter(data.productQuery.length)}
                                 onEndReached={() => { this.handleLoadMore(fetchMore) }}
-                                onEndReachedThreshold={0.1}
+                                onEndReachedThreshold={0.5}
+                                initialNumToRender={8}
+                                maxToRenderPerBatch={2}
                             />
-                            {/* The modal with data we want to show item props */}
-                            <ItemModal
-                                itemName={this.state.item.Varenavn}
-                                itemNumber={this.state.item.Varenummer}
-                                itemType={this.state.item.Varetype}
-                                itemCountry={this.state.item.Land}
-                                itemVolume={this.state.item.Volum}
-                                itemAlcoholPercentage={this.state.item.Alkohol}
-                                itemYear={this.state.item.Argang}
-                                itemTaste={this.state.item.Smak}
-                                itemLitrePrice={this.state.item.Literpris}
-                                itemPackaging={this.state.item.Emballasjetype}
-                                itemSelection={this.state.item.Produktutvalg}
-                                itemLink={this.state.item.Vareurl}
-                                itemAlcoholPerNok={this.state.item.AlkoholPrKrone}
-                                itemPrice={this.state.item.Pris}
-                            />
+                            {/* The modal with data we want to show */}
+                            <ItemModal />
                         </View>
                     );
                 }}
