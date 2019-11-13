@@ -18,7 +18,8 @@ class FavoriteTable extends Component{
         this.swipeoutBtns = [
           {
             text: 'Delete',
-            backgroundColor: 'red',
+            backgroundColor: '#D11A2A',
+            color: "white",
             onPress: () => this.removeFavorite(this.state.currItem)
           }
         ]

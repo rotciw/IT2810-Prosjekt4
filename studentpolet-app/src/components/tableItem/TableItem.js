@@ -5,7 +5,6 @@ import { styles } from '../../styles/tableItem';
 import { Ionicons } from '@expo/vector-icons';
 
 class TableItem extends PureComponent {
-
     handlePress(item) {
         // Show a modal, and check favorite state
         // Sets the item for modalStore so it can be used in other components such as ItemModal
