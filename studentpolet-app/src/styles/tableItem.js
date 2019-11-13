@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
         alignContent: 'flex-start',
         borderBottomColor: '#D8D8D8',
         borderBottomWidth: 1,
+        backgroundColor: 'white'
     },
     itemText: {
         flex: 12,
