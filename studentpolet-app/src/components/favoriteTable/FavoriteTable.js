@@ -42,7 +42,7 @@ class FavoriteTable extends Component{
     renderItem = ({ item }) => (
       <Swipeout
       right={[{
-        text: 'Delete',
+        text: 'Fjern',
         backgroundColor: '#D11A2A',
         color: "white",
         onPress: () => this.removeFavorite(item),
